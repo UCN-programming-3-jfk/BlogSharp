@@ -107,7 +107,7 @@ CREATE TABLE [dbo].[BlogPost](
 	[AuthorId] [int] NOT NULL,
 	[PostTitle] [nvarchar](100) NOT NULL,
 	[PostContent] [nvarchar](max) NOT NULL,
-	[PostCreationDate] [date] NOT NULL,
+	[PostCreationDate] [datetime2] NOT NULL,
  CONSTRAINT [PK_BlogPost] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

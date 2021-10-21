@@ -3,16 +3,33 @@ using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Model;
+using System.Collections.Generic;
 
 namespace TestingBlogSharp.DataAccess
 {
     public class AuthorRepositoryTests
     {
+        private List<int> _createdAuthorIds = new();
+
+        [TearDown]
+        public void CleanUp()
+        {
+           
+            Parallel.ForEach(_createdAuthorIds, async (id) =>
+            {
+                await new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(id);
+                _createdAuthorIds.Remove(id);
+            });
+        }
+
         [Test]
         public async Task GetAuthorsAsync()
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
+            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
+            var newAuthorId = await authorRep.CreateAsync(newAuthor);
+            _createdAuthorIds.Add(newAuthorId);
             //ACT
             var authors = await authorRep.GetAllAsync();
             //ASSERT
@@ -27,6 +44,7 @@ namespace TestingBlogSharp.DataAccess
             var newAuthor = new Author() { Email="Test@testerson.com", PasswordHash="98765"};
             //ACT
             var newAuthorId = await authorRep.CreateAsync(newAuthor);
+            _createdAuthorIds.Add(newAuthorId);
             //ASSERT
             Assert.IsTrue(newAuthorId > 0, "Created author ID not returned");
         }
@@ -38,6 +56,7 @@ namespace TestingBlogSharp.DataAccess
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
             var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
             var newId = await authorRep.CreateAsync(newAuthor);
+            _createdAuthorIds.Add(newId);
             //ACT
             bool deleted = await authorRep.DeleteAsync(newId);
             //ASSERT
@@ -51,6 +70,7 @@ namespace TestingBlogSharp.DataAccess
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
             var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
             newAuthor.Id = await authorRep.CreateAsync(newAuthor);
+            _createdAuthorIds.Add(newAuthor.Id);
             //ACT
             var refoundAuthor = await authorRep.GetByIdAsync(newAuthor.Id);
             //ASSERT
@@ -66,6 +86,7 @@ namespace TestingBlogSharp.DataAccess
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
             var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
             newAuthor.Id = await authorRep.CreateAsync(newAuthor);
+            _createdAuthorIds.Add(newAuthor.Id);
             newAuthor.Email = updatedEmail;
             newAuthor.PasswordHash = updatedPasswordHash;
             //ACT

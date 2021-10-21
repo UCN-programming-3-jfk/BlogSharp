@@ -2,5 +2,5 @@
 
 namespace DataAccess.Repositories
 {
-    interface IAuthorRepository : IRepository<Author> { }
+    public interface IAuthorRepository : IRepository<Author> { }
 }

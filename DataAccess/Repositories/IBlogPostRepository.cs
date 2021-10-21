@@ -2,5 +2,5 @@
 
 namespace DataAccess.Repositories
 {
-    interface IBlogPostRepository : IRepository<BlogPost> { }
+    public interface IBlogPostRepository : IRepository<BlogPost> { }
 }

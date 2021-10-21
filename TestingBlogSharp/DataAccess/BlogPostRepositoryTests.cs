@@ -1,5 +1,6 @@
 using DataAccess.Repositories;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Model;
@@ -10,7 +11,8 @@ namespace TestingBlogSharp.DataAccess
     public class BlogPostRepositoryTests
     {
 
-        public int NewAuthorId { get; set; }
+        private int NewAuthorId { get; set; }
+        private List<int> _createdBlogPostIds = new();
 
         [SetUp]
         public void Setup()
@@ -21,7 +23,12 @@ namespace TestingBlogSharp.DataAccess
         [TearDown]
         public void CleanUp()
         {
-           Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(NewAuthorId));
+            Parallel.ForEach(_createdBlogPostIds, async (id) =>
+            {
+                await new BlogPostRepository(Configuration.CONNECTION_STRING).DeleteAsync(id);
+                _createdBlogPostIds.Remove(id);
+            });
+            Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(NewAuthorId)).Wait();
         }
 
         [Test]
@@ -29,6 +36,9 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
+            var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
+            _createdBlogPostIds.Add(newBlogPostId);
             //ACT
             var blogposts = await blogpostRep.GetAllAsync();
             //ASSERT
@@ -43,6 +53,7 @@ namespace TestingBlogSharp.DataAccess
             var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId= NewAuthorId, PostContent="Content", PostCreationDate = System.DateTime.Now };
             //ACT
             var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
+            _createdBlogPostIds.Add(newBlogPostId);
             //ASSERT
             Assert.IsTrue(newBlogPostId > 0, "Created blogpost ID not returned");
         }
@@ -54,6 +65,7 @@ namespace TestingBlogSharp.DataAccess
             var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
             var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
             var newId = await blogpostRep.CreateAsync(newBlogPost);
+            _createdBlogPostIds.Add(newId);
             //ACT
             bool deleted = await blogpostRep.DeleteAsync(newId);
             //ASSERT
@@ -67,6 +79,7 @@ namespace TestingBlogSharp.DataAccess
             var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
             var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
             var newId = await blogpostRep.CreateAsync(newBlogPost);
+            _createdBlogPostIds.Add(newId);
             //ACT
             var refoundBlogPost = await blogpostRep.GetByIdAsync(newId);
             //ASSERT
@@ -86,6 +99,7 @@ namespace TestingBlogSharp.DataAccess
             newBlogPost.PostTitle = updatedPostTitle;
             newBlogPost.PostContent = updatedPostContent;
             newBlogPost.PostCreationDate = updatedPostDate;
+            _createdBlogPostIds.Add(newBlogPost.Id);
             //ACT
             await blogpostRep.UpdateAsync(newBlogPost);
             //ASSERT
