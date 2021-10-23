@@ -16,7 +16,7 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var query = "INSERT INTO Author (Email, PasswordHash) OUTPUT INSERTED.Id VALUES (@Email, @PasswordHash);";
+                var query = "INSERT INTO Author (Email, BlogTitle, PasswordHash) OUTPUT INSERTED.Id VALUES (@Email, @BlogTitle, @PasswordHash);";
                 using var connection = CreateConnection();
                 return await connection.QuerySingleAsync<int>(query, entity);
             }
@@ -72,7 +72,7 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var query = "UPDATE Author SET Email=@Email, PasswordHash=@PasswordHash WHERE Id=@Id;";
+                var query = "UPDATE Author SET Email=@Email, PasswordHash=@PasswordHash, BlogTitle=@BlogTitle WHERE Id=@Id;";
                 using var connection = CreateConnection();
                 return await connection.ExecuteAsync(query, entity) > 0;
             }

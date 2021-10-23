@@ -27,7 +27,7 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
+            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle="A grand title" };
             var newAuthorId = await authorRep.CreateAsync(newAuthor);
             _createdAuthorIds.Add(newAuthorId);
             //ACT
@@ -41,7 +41,7 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email="Test@testerson.com", PasswordHash="98765"};
+            var newAuthor = new Author() { Email="Test@testerson.com", PasswordHash="98765", BlogTitle = "A grand title" };
             //ACT
             var newAuthorId = await authorRep.CreateAsync(newAuthor);
             _createdAuthorIds.Add(newAuthorId);
@@ -54,7 +54,7 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
+            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
             var newId = await authorRep.CreateAsync(newAuthor);
             _createdAuthorIds.Add(newId);
             //ACT
@@ -68,13 +68,13 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
+            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
             newAuthor.Id = await authorRep.CreateAsync(newAuthor);
             _createdAuthorIds.Add(newAuthor.Id);
             //ACT
             var refoundAuthor = await authorRep.GetByIdAsync(newAuthor.Id);
             //ASSERT
-            Assert.IsTrue(newAuthor.Id == refoundAuthor.Id && newAuthor.Email == refoundAuthor.Email && newAuthor.PasswordHash == refoundAuthor.PasswordHash, "Author not found again");
+            Assert.IsTrue(newAuthor.Id == refoundAuthor.Id && newAuthor.Email == refoundAuthor.Email && newAuthor.BlogTitle == refoundAuthor.BlogTitle && newAuthor.PasswordHash == refoundAuthor.PasswordHash, "Author not found again");
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace TestingBlogSharp.DataAccess
             string updatedEmail = "Bing@Bingsby.test";
             string updatedPasswordHash = "123456";
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765" };
+            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
             newAuthor.Id = await authorRep.CreateAsync(newAuthor);
             _createdAuthorIds.Add(newAuthor.Id);
             newAuthor.Email = updatedEmail;

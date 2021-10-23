@@ -13,7 +13,7 @@ ALTER DATABASE [BlogSharp] SET COMPATIBILITY_LEVEL = 150
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
-EXEC [BlogSharp].[dbo].[sp_fulltext_database] @action = 'enable'
+EXEC [BlogSharp].[dbo].[sp_fulltext_d1atabase] @action = 'enable'
 end
 GO
 ALTER DATABASE [BlogSharp] SET ANSI_NULL_DEFAULT OFF 
@@ -90,6 +90,7 @@ GO
 CREATE TABLE [dbo].[Author](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Email] [nvarchar](100) NOT NULL,
+	[BlogTitle] [nvarchar](100) NOT NULL,
 	[PasswordHash] [nvarchar](100) NOT NULL,
  CONSTRAINT [PK_Author] PRIMARY KEY CLUSTERED 
 (
