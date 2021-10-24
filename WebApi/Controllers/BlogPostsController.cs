@@ -9,14 +9,14 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogPostController : ControllerBase
+    public class BlogPostsController : ControllerBase
     {
 
         IBlogPostRepository _blogpostRepository;
 
-        public BlogPostController(IConfiguration configuration)
+        public BlogPostsController(IConfiguration configuration)
         {
-            _blogpostRepository = new BlogPostRepository(configuration.GetConnectionString("DefaultConnection")); ;
+            _blogpostRepository = new BlogPostRepository(configuration.GetConnectionString("DefaultConnection"));
         }
 
         // GET: api/<BlogPostController>

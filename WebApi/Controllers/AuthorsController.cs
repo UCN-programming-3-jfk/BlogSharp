@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Model;
 using DataAccess.Repositories;
@@ -13,12 +12,12 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
 
         IAuthorRepository _authorRepository;
 
-        public AuthorController(IConfiguration configuration)
+        public AuthorsController(IConfiguration configuration)
         {
             _authorRepository = new AuthorRepository(configuration.GetConnectionString("DefaultConnection"));
         }

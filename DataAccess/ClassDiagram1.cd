@@ -3,7 +3,7 @@
   <Class Name="DataAccess.Model.Author">
     <Position X="0.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACCAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AACCAAAAACAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
       <FileName>Model\Author.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -45,13 +45,13 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="DataAccess.Repositories.IAuthorRepository">
-    <Position X="1" Y="5.25" Width="1.5" />
+    <Position X="1" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\IAuthorRepository.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DataAccess.Repositories.IBlogPostRepository" Collapsed="true">
+  <Interface Name="DataAccess.Repositories.IBlogPostRepository">
     <Position X="3.5" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
