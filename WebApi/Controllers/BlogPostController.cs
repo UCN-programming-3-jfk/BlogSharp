@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Controllers
 {
@@ -13,9 +14,9 @@ namespace WebApi.Controllers
 
         IBlogPostRepository _blogpostRepository;
 
-        public BlogPostController(IBlogPostRepository blogpostRepository)
+        public BlogPostController(IConfiguration configuration)
         {
-            _blogpostRepository = blogpostRepository;
+            _blogpostRepository = new BlogPostRepository(configuration.GetConnectionString("DefaultConnection")); ;
         }
 
         // GET: api/<BlogPostController>

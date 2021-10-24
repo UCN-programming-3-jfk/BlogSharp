@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,9 +18,9 @@ namespace WebApi.Controllers
 
         IAuthorRepository _authorRepository;
 
-        public AuthorController(IAuthorRepository authorRepository)
+        public AuthorController(IConfiguration configuration)
         {
-            _authorRepository = authorRepository;
+            _authorRepository = new AuthorRepository(configuration.GetConnectionString("DefaultConnection"));
         }
 
         // GET: api/<AuthorController>
