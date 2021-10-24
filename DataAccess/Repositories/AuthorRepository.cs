@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataAccess.Authentication;
 using DataAccess.Model;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,6 @@ namespace DataAccess.Repositories
     public class AuthorRepository : BaseRepository, IAuthorRepository
     {
         public AuthorRepository(string connectionstring) : base(connectionstring) { }
-
-        public async Task<int> CreateAsync(Author entity)
-        {
-            try
-            {
-                var query = "INSERT INTO Author (Email, BlogTitle, PasswordHash) OUTPUT INSERTED.Id VALUES (@Email, @BlogTitle, @PasswordHash);";
-                using var connection = CreateConnection();
-                return await connection.QuerySingleAsync<int>(query, entity);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error inserting new author: '{ex.Message}'.", ex);
-            }
-        }
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -67,11 +54,12 @@ namespace DataAccess.Repositories
             }
         }
 
+
         public async Task<bool> UpdateAsync(Author entity)
         {
             try
             {
-                var query = "UPDATE Author SET Email=@Email, PasswordHash=@PasswordHash, BlogTitle=@BlogTitle WHERE Id=@Id;";
+                var query = "UPDATE Author SET Email=@Email, BlogTitle=@BlogTitle WHERE Id=@Id;";
                 using var connection = CreateConnection();
                 return await connection.ExecuteAsync(query, entity) > 0;
             }
@@ -79,6 +67,69 @@ namespace DataAccess.Repositories
             {
                 throw new Exception($"Error updating author: '{ex.Message}'.", ex);
             }
+        }
+
+        public async Task<int> CreateAsync(Author entity, string password)
+        {
+            try
+            {
+                var query = "INSERT INTO Author (Email, BlogTitle, PasswordHash) OUTPUT INSERTED.Id VALUES (@Email, @BlogTitle, @PasswordHash);";
+                var passwordHash = BCryptTool.HashPassword(password);
+                using var connection = CreateConnection();
+                return await connection.QuerySingleAsync<int>(query, new { Email = entity.Email, BlogTitle = entity.BlogTitle, PasswordHash = passwordHash });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error creating new author: '{ex.Message}'.", ex);
+            }
+
+        }
+
+        public async Task<int> LoginAsync(string email, string password)
+        {
+            try
+            {
+                var query = "SELECT Id, PasswordHash FROM Author WHERE Email=@Email";
+                using var connection = CreateConnection();
+
+                var authorTuple = await connection.QuerySingleAsync<AuthorTuple>(query, new { Email = email});
+                if (BCryptTool.ValidatePassword(password, authorTuple.PasswordHash))
+                {
+                    return authorTuple.Id;
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error logging in for author with email {email}: '{ex.Message}'.", ex);
+            }
+        }
+
+        public async Task<bool> UpdatePasswordAsync(string email, string oldPassword, string newPassword)
+        {
+            try
+            {
+                var query = "UPDATE Author SET PasswordHash=@NewPasswordHash WHERE Id=@Id;";
+                var id = await LoginAsync(email, oldPassword);
+                if (id > 0)
+                {
+                    var newPasswordHash = BCryptTool.HashPassword(newPassword);
+                    using var connection = CreateConnection();
+                    return await connection.ExecuteAsync(query, new { Id = id, NewPasswordHash = newPasswordHash }) > 0;
+                }
+                return false;
+                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating author: '{ex.Message}'.", ex);
+            }
+        }
+
+        internal class AuthorTuple 
+        {
+            public int Id;
+            public string PasswordHash;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TestingBlogSharp.DataAccess
         [SetUp]
         public void Setup()
         {
-            NewAuthorId = Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).CreateAsync(new Author() { Email="New author for post tests", BlogTitle="Title of my blog",  PasswordHash = "0987"})).Result;
+            NewAuthorId = Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).CreateAsync(new Author() { Email="New author for post tests", BlogTitle="Title of my blog"}, "test")).Result;
         }
 
         [TearDown]

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Model;
-using System.Collections.Generic;
 
 namespace TestingBlogSharp.DataAccess
 {
@@ -19,12 +18,27 @@ namespace TestingBlogSharp.DataAccess
         }
 
         [Test]
+        public async Task CreateAuthorAsync()
+        {
+            //ARRANGE
+            var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
+            var newAuthor = new Author() { Email="Test@testerson.com", BlogTitle = "A grand title" };
+            var password = "SuperSecretPassword12345678!";
+            //ACT
+            var newAuthorId = await authorRep.CreateAsync(newAuthor, password);
+            _createdAuthorId = newAuthorId;
+            //ASSERT
+            Assert.IsTrue(newAuthorId > 0, "Created author ID not returned");
+        }
+
+        [Test]
         public async Task GetAuthorsAsync()
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle="A grand title" };
-            var newAuthorId = await authorRep.CreateAsync(newAuthor);
+            var newAuthor = new Author() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
+            var password = "SuperSecretPassword12345678!";
+            var newAuthorId = await authorRep.CreateAsync(newAuthor, password);
             _createdAuthorId = newAuthorId;
             //ACT
             var authors = await authorRep.GetAllAsync();
@@ -33,25 +47,12 @@ namespace TestingBlogSharp.DataAccess
         }
 
         [Test]
-        public async Task CreateAuthorAsync()
-        {
-            //ARRANGE
-            var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email="Test@testerson.com", PasswordHash="98765", BlogTitle = "A grand title" };
-            //ACT
-            var newAuthorId = await authorRep.CreateAsync(newAuthor);
-            _createdAuthorId = newAuthorId;
-            //ASSERT
-            Assert.IsTrue(newAuthorId > 0, "Created author ID not returned");
-        }
-
-        [Test]
         public async Task DeleteAuthorAsync()
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
-            var newAuthorId = await authorRep.CreateAsync(newAuthor);
+            var newAuthor = new Author() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
+            var newAuthorId = await authorRep.CreateAsync(newAuthor, "test");
             _createdAuthorId = newAuthorId;
             //ACT
             bool deleted = await authorRep.DeleteAsync(newAuthorId);
@@ -64,13 +65,13 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
-            newAuthor.Id = await authorRep.CreateAsync(newAuthor);
+            var newAuthor = new Author() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
+            newAuthor.Id = await authorRep.CreateAsync(newAuthor, "test");
             _createdAuthorId = newAuthor.Id;
             //ACT
             var refoundAuthor = await authorRep.GetByIdAsync(newAuthor.Id);
             //ASSERT
-            Assert.IsTrue(newAuthor.Id == refoundAuthor.Id && newAuthor.Email == refoundAuthor.Email && newAuthor.BlogTitle == refoundAuthor.BlogTitle && newAuthor.PasswordHash == refoundAuthor.PasswordHash, "Author not found again");
+            Assert.IsTrue(newAuthor.Id == refoundAuthor.Id && newAuthor.Email == refoundAuthor.Email && newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again");
         }
 
         [Test]
@@ -78,18 +79,37 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE
             string updatedEmail = "Bing@Bingsby.test";
-            string updatedPasswordHash = "123456";
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
-            var newAuthor = new Author() { Email = "Test@testerson.com", PasswordHash = "98765", BlogTitle = "A grand title" };
-            newAuthor.Id = await authorRep.CreateAsync(newAuthor);
+            var newAuthor = new Author() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
+            newAuthor.Id = await authorRep.CreateAsync(newAuthor, "test");
             _createdAuthorId = newAuthor.Id;
-            newAuthor.Email = updatedEmail;
-            newAuthor.PasswordHash = updatedPasswordHash;
+            newAuthor.Email = updatedEmail;;
             //ACT
-            await authorRep.UpdateAsync(newAuthor);
+            await authorRep.UpdateAsync(newAuthor );
             //ASSERT
             var refoundAuthor = await authorRep.GetByIdAsync(newAuthor.Id);
-            Assert.IsTrue(refoundAuthor.Email == updatedEmail && refoundAuthor.PasswordHash == updatedPasswordHash, "Author not updated");
+            Assert.IsTrue(refoundAuthor.Email == updatedEmail, "Author not updated");
         }
+
+        [Test]
+        public async Task UpdateAuthorPasswordAsync()
+        {
+            //ARRANGE
+            var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);
+            var newAuthor = new Author() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
+            var oldPassword = "TestOldPassword";
+            var newPassword = "TestNewPassword";
+            newAuthor.Id = await authorRep.CreateAsync(newAuthor, oldPassword);
+            _createdAuthorId = newAuthor.Id;
+
+            //ACT
+            var updateSuccess = await authorRep.UpdatePasswordAsync(newAuthor.Email, oldPassword, newPassword);
+            
+            //ASSERT
+            var loginWithNewPasswordOk = await authorRep.LoginAsync(newAuthor.Email, newPassword);
+            Assert.IsTrue(updateSuccess, "Author not updated");
+            Assert.IsTrue(loginWithNewPasswordOk > 0, "Unable to login with Author's updated password");
+        }
+
     }
 }

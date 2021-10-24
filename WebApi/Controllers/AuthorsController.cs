@@ -40,9 +40,9 @@ namespace WebApi.Controllers
 
         // POST api/<AuthorController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]Author newAuthor)
+        public async Task<ActionResult<int>> Post([FromBody]Author newAuthor, string password)
         {
-            return Ok(await _authorRepository.CreateAsync(newAuthor));
+            return Ok(await _authorRepository.CreateAsync(newAuthor, password));
         }
 
         // PUT api/<AuthorController>/5
