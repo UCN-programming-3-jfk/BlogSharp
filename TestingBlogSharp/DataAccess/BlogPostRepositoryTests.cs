@@ -23,11 +23,6 @@ namespace TestingBlogSharp.DataAccess
         [TearDown]
         public void CleanUp()
         {
-            Parallel.ForEach(_createdBlogPostIds, async (id) =>
-            {
-                await new BlogPostRepository(Configuration.CONNECTION_STRING).DeleteAsync(id);
-                _createdBlogPostIds.Remove(id);
-            });
             Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(NewAuthorId)).Wait();
         }
 
