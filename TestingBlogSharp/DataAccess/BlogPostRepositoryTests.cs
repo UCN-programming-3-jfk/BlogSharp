@@ -17,12 +17,14 @@ namespace TestingBlogSharp.DataAccess
         [SetUp]
         public void Setup()
         {
+            //SetUp methods cannot run async :(
             NewAuthorId = Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).CreateAsync(new Author() { Email="New author for post tests", BlogTitle="Title of my blog"}, "test")).Result;
         }
 
         [TearDown]
         public void CleanUp()
         {
+            //TearDown methods cannot run async :(
             Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(NewAuthorId)).Wait();
         }
 

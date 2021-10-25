@@ -13,7 +13,8 @@ namespace TestingBlogSharp.DataAccess
         [TearDown]
         public void CleanUp()
         {
-              Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(_createdAuthorId)).Wait();
+            //TearDown methods cannot run async :(
+            Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(_createdAuthorId)).Wait();
             
         }
 
@@ -92,7 +93,7 @@ namespace TestingBlogSharp.DataAccess
         }
 
         [Test]
-        public async Task UpdateAuthorPasswordAsync()
+        public async Task UpdateAuthorPasswordAndLoginAsync()
         {
             //ARRANGE
             var authorRep = new AuthorRepository(Configuration.CONNECTION_STRING);

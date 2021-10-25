@@ -26,19 +26,19 @@ namespace DataAccess.Repositories
             }
         }
 
-        public async Task<IEnumerable<Author>> GetAllAsync()
-        {
-            try
-            {
-                var query = "SELECT * FROM Author";
-                using var connection = CreateConnection();
-                return (await connection.QueryAsync<Author>(query)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error getting all authors: '{ex.Message}'.", ex);
-            }
-        }
+public async Task<IEnumerable<Author>> GetAllAsync()
+{
+    try
+    {
+        var query = "SELECT * FROM Author";
+        using var connection = CreateConnection();
+        return (await connection.QueryAsync<Author>(query)).ToList();
+    }
+    catch (Exception ex)
+    {
+        throw new Exception($"Error getting all authors: '{ex.Message}'.", ex);
+    }
+}
 
         public async Task<Author> GetByIdAsync(int id)
         {
@@ -118,7 +118,6 @@ namespace DataAccess.Repositories
                     return await connection.ExecuteAsync(query, new { Id = id, NewPasswordHash = newPasswordHash }) > 0;
                 }
                 return false;
-                
             }
             catch (Exception ex)
             {
