@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApi.DTOs;
+using WebApi.DTOs.Converters;
 
 namespace WebApi.Controllers
 {
@@ -21,32 +22,33 @@ namespace WebApi.Controllers
 
         // GET: api/authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
         {
-            return  Ok(await _authorRepository.GetAllAsync());
+            var authors = await _authorRepository.GetAllAsync();
+            return Ok(authors.ToDtos());
         }
 
         // GET api/authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Author>> Get(int id)
+        public async Task<ActionResult<AuthorDto>> Get(int id)
         {
             var author = await _authorRepository.GetByIdAsync(id);
             if (author == null) { return NotFound(); }
-            else { return Ok(author); }
+            else { return Ok(author.ToDto()); }
         }
 
         // POST api/authors
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]Author newAuthor, string password)
+        public async Task<ActionResult<int>> Post([FromBody] AuthorDto newAuthorDto, string password)
         {
-            return Ok(await _authorRepository.CreateAsync(newAuthor, password));
+            return Ok(await _authorRepository.CreateAsync(newAuthorDto.FromDto(), password));
         }
 
         // PUT api/authors/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]Author authorToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody] AuthorDto authorDtoToUpdate)
         {
-            if (!await _authorRepository.UpdateAsync(authorToUpdate)) { return NotFound(); }
+            if (!await _authorRepository.UpdateAsync(authorDtoToUpdate.FromDto())) { return NotFound(); }
             else { return Ok(); }
         }
 

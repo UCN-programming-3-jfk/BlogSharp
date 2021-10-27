@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Authentication
 {
-class BCryptTool
+public static class BCryptTool
 {
     private static string GetRandomSalt() => BCrypt.Net.BCrypt.GenerateSalt(12);
 

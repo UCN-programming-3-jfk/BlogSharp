@@ -6,6 +6,8 @@ using DataAccess.Model;
 
 namespace TestingBlogSharp.DataAccess
 {
+
+    //TODO: add test to test cascading delete of BlogPosts with their Author
     public class AuthorRepositoryTests
     {
         private int _createdAuthorId;

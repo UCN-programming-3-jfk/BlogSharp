@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApi.DTOs;
+using WebApi.DTOs.Converters;
 
 namespace WebApi.Controllers
 {
@@ -21,14 +22,15 @@ namespace WebApi.Controllers
 
         // GET: api/<BlogPostController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<BlogPostDto>>> GetAsync()
         {
-            return  Ok(await _blogpostRepository.GetAllAsync());
+            var posts = await _blogpostRepository.GetAllAsync();
+            return Ok(posts.ToDtos());
         }
 
         // GET api/<BlogPostController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPost>> Get(int id)
+        public async Task<ActionResult<BlogPostDto>> Get(int id)
         {
             var blogPost = await _blogpostRepository.GetByIdAsync(id);
             if (blogPost == null) { return NotFound(); }
@@ -37,16 +39,16 @@ namespace WebApi.Controllers
 
         // POST api/<BlogPostController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]BlogPost newBlogPost)
+        public async Task<ActionResult<int>> Post([FromBody]BlogPostDto newBlogPostDto)
         {
-            return Ok(await _blogpostRepository.CreateAsync(newBlogPost));
+            return Ok(await _blogpostRepository.CreateAsync(newBlogPostDto.FromDto()));
         }
 
         // PUT api/<BlogPostController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]BlogPost blogPostToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody]BlogPostDto blogPostDtoToUpdate)
         {
-            if (!await _blogpostRepository.UpdateAsync(blogPostToUpdate)) { return NotFound(); }
+            if (!await _blogpostRepository.UpdateAsync(blogPostDtoToUpdate.FromDto())) { return NotFound(); }
             else { return Ok(); }
         }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DataAccess.Repositories
 {
     public interface IBlogPostRepository {
-
+        //Default CRUD methods for Repository (DAO pattern)
         Task<int> CreateAsync(BlogPost entity);
         Task<IEnumerable<BlogPost>> GetAllAsync();
         Task<BlogPost> GetByIdAsync(int id);
