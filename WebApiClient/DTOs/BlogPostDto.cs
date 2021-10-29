@@ -2,7 +2,7 @@
 
 namespace WebApiClient.DTOs
 {
-    public class BlogPost
+    public class BlogPostDto
     {
         public int Id { get; set; }
         public int AuthorId { get; set; }

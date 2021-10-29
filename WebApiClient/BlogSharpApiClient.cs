@@ -12,7 +12,7 @@ public class BlogSharpApiClient
         private RestClient _restClient;
         public BlogSharpApiClient(string uri) => _restClient = new RestClient(new Uri(uri));
 
-        public async Task<int> CreateAuthorAsync(Author entity, string password)
+        public async Task<int> CreateAuthorAsync(AuthorDto entity, string password)
         {
             var response = await _restClient.RequestAsync<int>(Method.POST, "authors", new {entity, Password=password});
 
@@ -22,9 +22,9 @@ public class BlogSharpApiClient
             }
             return response.Data;
         }
-        public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
+        public async Task<IEnumerable<AuthorDto>> GetAllAuthorsAsync()
         {
-            var response = await _restClient.RequestAsync<IEnumerable<Author>>(Method.GET, $"authors");
+            var response = await _restClient.RequestAsync<IEnumerable<AuthorDto>>(Method.GET, $"authors");
 
             if (!response.IsSuccessful)
             {
@@ -33,9 +33,9 @@ public class BlogSharpApiClient
             return response.Data;
         }
 
-        public async Task<Author> GetAuthorByIdAsync(int id)
+        public async Task<AuthorDto> GetAuthorByIdAsync(int id)
         {
-            var response = await _restClient.RequestAsync<Author>(Method.GET, $"authors/{id}");
+            var response = await _restClient.RequestAsync<AuthorDto>(Method.GET, $"authors/{id}");
 
             if (!response.IsSuccessful)
             {
@@ -44,7 +44,7 @@ public class BlogSharpApiClient
             return response.Data;
         }
 
-        public async Task<bool> UpdateAuthorAsync(Author entity)
+        public async Task<bool> UpdateAuthorAsync(AuthorDto entity)
         {
             var response = await _restClient.RequestAsync<bool>(Method.PUT, "authors", entity);
 
@@ -70,7 +70,7 @@ public class BlogSharpApiClient
             throw new NotImplementedException();
         }
 
-        public async Task<int> CreateBlogPostAsync(BlogPost entity)
+        public async Task<int> CreateBlogPostAsync(BlogPostDto entity)
         {
             var response = await _restClient.ExecuteAsync<int>(new RestRequest());
 
@@ -81,17 +81,17 @@ public class BlogSharpApiClient
             return response.Data;
         }
 
-        public async Task<IEnumerable<BlogPost>> GetAllBlogPostsAsync()
+        public async Task<IEnumerable<BlogPostDto>> GetAllBlogPostsAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BlogPost> GetBlogPostByIdAsync(int id)
+        public async Task<BlogPostDto> GetBlogPostByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> UpdateBlogPostAsync(BlogPost entity)
+        public async Task<bool> UpdateBlogPostAsync(BlogPostDto entity)
         {
             throw new NotImplementedException();
         }

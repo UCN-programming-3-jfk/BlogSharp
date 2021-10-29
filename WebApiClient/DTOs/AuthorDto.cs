@@ -1,6 +1,6 @@
 ﻿namespace WebApiClient.DTOs
 {
-    public class Author
+    public class AuthorDto
     {
         public int Id { get; set;}
         public string BlogTitle { get; set; }

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\WebApiClient\WebApiClient.csproj" />
   </ItemGroup>
 
 </Project>
