@@ -1,8 +1,6 @@
-using DataAccess.Repositories;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess.Model;
 using WebApiClient;
 using WebApiClient.DTOs;
 

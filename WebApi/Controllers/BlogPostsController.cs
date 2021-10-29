@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,18 +14,32 @@ namespace WebApi.Controllers
     public class BlogPostsController : ControllerBase
     {
 
+        #region Repository and constructor
         IBlogPostRepository _blogpostRepository;
 
         public BlogPostsController(IConfiguration configuration)
         {
             _blogpostRepository = new BlogPostRepository(configuration.GetConnectionString("DefaultConnection"));
         }
+        #endregion
 
-        // GET: api/<BlogPostController>
+        #region Default CRUD actions
+        // GET: api/<BlogPostController>?authorid=23
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<BlogPostDto>>> Get([FromQuery] int? authorId)
         {
-            var posts = await _blogpostRepository.GetAllAsync();
+
+            IEnumerable<BlogPost> posts;
+
+            if (authorId.HasValue)
+            {
+                posts = await _blogpostRepository.GetByAuthorIdAsync(authorId.Value);
+            }
+            else
+            {
+                posts = await _blogpostRepository.GetAllAsync();
+            }
+
             return Ok(posts.ToDtos());
         }
 
@@ -39,14 +54,14 @@ namespace WebApi.Controllers
 
         // POST api/<BlogPostController>
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody]BlogPostDto newBlogPostDto)
+        public async Task<ActionResult<int>> Post([FromBody] BlogPostDto newBlogPostDto)
         {
             return Ok(await _blogpostRepository.CreateAsync(newBlogPostDto.FromDto()));
         }
 
         // PUT api/<BlogPostController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]BlogPostDto blogPostDtoToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody] BlogPostDto blogPostDtoToUpdate)
         {
             if (!await _blogpostRepository.UpdateAsync(blogPostDtoToUpdate.FromDto())) { return NotFound(); }
             else { return Ok(); }
@@ -58,6 +73,7 @@ namespace WebApi.Controllers
         {
             if (!await _blogpostRepository.DeleteAsync(id)) { return NotFound(); }
             else { return Ok(); }
-        }
+        } 
+        #endregion
     }
 }

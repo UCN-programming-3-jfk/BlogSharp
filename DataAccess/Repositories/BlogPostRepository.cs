@@ -2,7 +2,6 @@
 using DataAccess.Model;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,5 +80,20 @@ namespace DataAccess.Repositories
                 throw new Exception($"Error updating blog post: '{ex.Message}'.", ex);
             }
         }
+
+        public async Task<IEnumerable<BlogPost>> GetByAuthorIdAsync(int authorId)
+        {
+            try
+            {
+                var query = "SELECT * FROM BlogPost WHERE AuthorId=@AuthorId";
+                using var connection = CreateConnection();
+                return await connection.QueryAsync<BlogPost>(query, new { authorId });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting blog posts with authorid {authorId}: '{ex.Message}'.", ex);
+            }
+        }
+   
     }
 }

@@ -11,5 +11,7 @@ namespace DataAccess.Repositories
         Task<BlogPost> GetByIdAsync(int id);
         Task<bool> UpdateAsync(BlogPost entity);
         Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<BlogPost>> GetByAuthorIdAsync(int authorId);
     }
 }
