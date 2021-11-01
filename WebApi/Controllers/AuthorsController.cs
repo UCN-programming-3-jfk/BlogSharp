@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApi.DTOs;
 using WebApi.DTOs.Converters;
-using WebApi.DTOs.IncomingOnly;
 
 namespace WebApi.Controllers
 {
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         #region Default CRUD actions
         // GET: api/authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CreateAuthorDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
         {
             var authors = await _authorRepository.GetAllAsync();
             return Ok(authors.ToDtos());
@@ -33,7 +33,7 @@ namespace WebApi.Controllers
 
         // GET api/authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CreateAuthorDto>> GetAsync(int id)
+        public async Task<ActionResult<AuthorDto>> GetAsync(int id)
         {
             var author = await _authorRepository.GetByIdAsync(id);
             if (author == null) { return NotFound(); }
@@ -42,14 +42,14 @@ namespace WebApi.Controllers
 
         // POST api/authors
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody] CreateAuthorDto newAuthorDto)
+        public async Task<ActionResult<int>> Post([FromBody] AuthorDto newAuthorDto)
         {
             return Ok(await _authorRepository.CreateAsync(newAuthorDto.FromDto(), newAuthorDto.Password));
         }
 
         // PUT api/authors/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] CreateAuthorDto authorDtoToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody] AuthorDto authorDtoToUpdate)
         {
             if (!await _authorRepository.UpdateAsync(authorDtoToUpdate.FromDto())) { return NotFound(); }
             { return Ok(); }
@@ -70,9 +70,9 @@ namespace WebApi.Controllers
         #region Password update action
 
         [HttpPut("{id}/Password")]
-        public async Task<ActionResult> UpdatePassword(int id, [FromBody] PasswordUpdateDto passwordUpdateInfo)
+        public async Task<ActionResult> UpdatePassword(int id, [FromBody] AuthorDto passwordUpdateInfo)
         {
-            if (!await _authorRepository.UpdatePasswordAsync(passwordUpdateInfo.Email, passwordUpdateInfo.OldPassword, passwordUpdateInfo.NewPassword))
+            if (!await _authorRepository.UpdatePasswordAsync(passwordUpdateInfo.Email, passwordUpdateInfo.Password, passwordUpdateInfo.NewPassword))
             { return NotFound(); }
             { return Ok(); }
         } 

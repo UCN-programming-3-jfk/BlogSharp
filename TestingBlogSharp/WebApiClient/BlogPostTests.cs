@@ -13,21 +13,28 @@ namespace TestingBlogSharp.WebApi
     public class BlogPostTests
     {
 
-        private int NewAuthorId { get; set; }
+        private AuthorDto _newAuthor;
         private List<int> _createdBlogPostIds = new();
 
+        private AuthorDto CreateNewAuthor()
+        {
+            _newAuthor = new AuthorDto() { Email = "New author for post tests", BlogTitle = "Title of my blog", Password = "password" };
+            return _newAuthor;
+        }
+
+
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             //SetUp methods cannot run async :(
-            NewAuthorId = Task.Run(() => new  BlogSharpApiClient(Configuration.WEB_API_URL).CreateAuthorAsync(new AuthorDto() { Email = "New author for post tests", BlogTitle = "Title of my blog"}, "password")).Result;
+            _newAuthor.Id = await new  BlogSharpApiClient(Configuration.WEB_API_URL).CreateAuthorAsync(CreateNewAuthor());
         }
 
         [TearDown]
-        public void CleanUp()
+        public async Task CleanUp()
         {
             //TearDown methods cannot run async :(
-            Task.Run(() => new AuthorRepository(Configuration.WEB_API_URL).DeleteAsync(NewAuthorId)).Wait();
+            Task.Run(() => new AuthorRepository(Configuration.WEB_API_URL).DeleteAsync(_newAuthor.Id)).Wait();
         }
 
         [Test]
@@ -35,7 +42,7 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE
             var blogpostRep = new BlogPostRepository(Configuration.WEB_API_URL);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = DateTime.Now };
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = DateTime.Now };
             var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
             _createdBlogPostIds.Add(newBlogPostId);
             //ACT
@@ -49,7 +56,7 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE
             var blogpostRep = new BlogPostRepository(Configuration.WEB_API_URL);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = DateTime.Now };
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = DateTime.Now };
             //ACT
             var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
             _createdBlogPostIds.Add(newBlogPostId);
@@ -62,7 +69,7 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE
             var blogpostRep = new BlogPostRepository(Configuration.WEB_API_URL);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = DateTime.Now };
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = DateTime.Now };
             var newId = await blogpostRep.CreateAsync(newBlogPost);
             _createdBlogPostIds.Add(newId);
             //ACT
@@ -76,7 +83,7 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE
             var blogpostRep = new BlogPostRepository(Configuration.WEB_API_URL);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = DateTime.Now };
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = DateTime.Now };
             var newId = await blogpostRep.CreateAsync(newBlogPost);
             _createdBlogPostIds.Add(newId);
             //ACT
@@ -93,7 +100,7 @@ namespace TestingBlogSharp.WebApi
             string updatedPostContent = "Even greater content";
             DateTime updatedPostDate = DateTime.Now.AddDays(-3);
             var blogpostRep = new BlogPostRepository(Configuration.WEB_API_URL);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = DateTime.Now };
+            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = DateTime.Now };
             newBlogPost.Id = await blogpostRep.CreateAsync(newBlogPost);
             newBlogPost.PostTitle = updatedPostTitle;
             newBlogPost.PostContent = updatedPostContent;

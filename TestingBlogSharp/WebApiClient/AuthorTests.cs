@@ -10,54 +10,60 @@ namespace TestingBlogSharp.WebApi
     //TODO: add test to test cascading delete of BlogPosts with their Author
     public class AuthorTests
     {
-        private int _createdAuthorId;
+        private AuthorDto _newAuthorDto;
+        private BlogSharpApiClient _client = new BlogSharpApiClient(Configuration.WEB_API_URL);
+
+        private async Task CreateNewAuthorAsync()
+        {
+            _newAuthorDto = new AuthorDto() { Email = "TestingBlogSharp.WebApi@myblog.com", BlogTitle = "Title of my blog", Password = "password" };
+           _newAuthorDto.Id = await _client.CreateAuthorAsync(_newAuthorDto);
+        }
+
+        [SetUp]
+        public async Task Setup()
+        {
+            await CreateNewAuthorAsync();
+        }
 
         [TearDown]
-        public async Task CleanUp()
+        public void CleanUp()
         {
-            //TearDown methods cannot run async :(
-            await new BlogSharpApiClient(Configuration.WEB_API_URL).DeleteAuthorAsync(_createdAuthorId);
+            try
+            {
+                Task.Run(() => _client.DeleteAuthorAsync(_newAuthorDto.Id)).Wait();
+            }
+            catch (System.Exception ex)
+            {
+            }
         }
 
         [Test]
         public async Task CreateAuthorAsync()
         {
             //ARRANGE
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            var password = "SuperSecretPassword12345678!";
             //ACT
-            _createdAuthorId = await authorRep.CreateAuthorAsync(newAuthorDto, password);
+            
             
             //ASSERT
-            Assert.IsTrue(_createdAuthorId > 0, "Created author ID not returned");
+            Assert.IsTrue(_newAuthorDto.Id > 0, "Created author ID not returned");
         }
 
         [Test]
         public async Task GetAuthorsAsync()
         {
             //ARRANGE
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            var password = "SuperSecretPassword12345678!";
-            var newAuthorDtoId = await authorRep.CreateAuthorAsync(newAuthorDto, password);
-            _createdAuthorId = newAuthorDtoId;
             //ACT
-            var authors = await authorRep.GetAllAuthorsAsync();
+            var authors = await _client.GetAllAuthorsAsync();
             //ASSERT
             Assert.IsTrue(authors.Count() > 0, "No authors returned");
         }
 
         [Test]
-        public async Task DeleteAuthorAsync()
+        public void DeleteAuthor()
         {
             //ARRANGE
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            var newAuthorDtoId = await authorRep.CreateAuthorAsync(newAuthorDto, "test");
-            _createdAuthorId = newAuthorDtoId;
             //ACT
-            bool deleted = await authorRep.DeleteAuthorAsync(newAuthorDtoId);
+            bool deleted = Task.Run(() =>_client.DeleteAuthorAsync(_newAuthorDto.Id)).Result;
             //ASSERT
             Assert.IsTrue(deleted, "Author not deleted");
         }
@@ -66,16 +72,11 @@ namespace TestingBlogSharp.WebApi
         public async Task FindAuthorAsync()
         {
             //ARRANGE
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            newAuthorDto.Id = await authorRep.CreateAuthorAsync(newAuthorDto, "test");
-            _createdAuthorId = newAuthorDto.Id;
-
             //ACT
-            var refoundAuthor = await authorRep.GetAuthorByIdAsync(newAuthorDto.Id);
+            var refoundAuthor = await _client.GetAuthorByIdAsync(_newAuthorDto.Id);
             
             //ASSERT
-            Assert.IsTrue(newAuthorDto.Id == refoundAuthor.Id && newAuthorDto.Email == refoundAuthor.Email && newAuthorDto.BlogTitle == refoundAuthor.BlogTitle, "Author not found again");
+            Assert.IsTrue(_newAuthorDto.Id == refoundAuthor.Id && _newAuthorDto.Email == refoundAuthor.Email && _newAuthorDto.BlogTitle == refoundAuthor.BlogTitle, "Author not found again");
         }
 
         [Test]
@@ -83,34 +84,25 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE
             string updatedEmail = "Bing@Bingsby.test";
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            newAuthorDto.Id = await authorRep.CreateAuthorAsync(newAuthorDto, "test");
-            _createdAuthorId = newAuthorDto.Id;
-            newAuthorDto.Email = updatedEmail; ;
+            _newAuthorDto.Email = updatedEmail; ;
             //ACT
-            await authorRep.UpdateAuthorAsync(newAuthorDto);
+            await _client.UpdateAuthorAsync(_newAuthorDto);
             //ASSERT
-            var refoundAuthor = await authorRep.GetAuthorByIdAsync(newAuthorDto.Id);
+            var refoundAuthor = await _client.GetAuthorByIdAsync(_newAuthorDto.Id);
             Assert.IsTrue(refoundAuthor.Email == updatedEmail, "Author not updated");
         }
 
         [Test]
-        public async Task UpdateAuthorPasswordAndLoginAsync()
+        public async Task UpdateAuthorPasswordAsync()
         {
             //ARRANGE
-            var authorRep = new BlogSharpApiClient(Configuration.WEB_API_URL);
-            var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
-            var oldPassword = "TestOldPassword";
-            var newPassword = "TestNewPassword";
-            newAuthorDto.Id = await authorRep.CreateAuthorAsync(newAuthorDto, oldPassword);
-            _createdAuthorId = newAuthorDto.Id;
-
+            _newAuthorDto.NewPassword = "NewPassword1234!";
             //ACT
-            var updateSuccess = await authorRep.UpdateAuthorPasswordAsync(newAuthorDto.Email, oldPassword, newPassword);
+            var updateSuccess = await _client.UpdateAuthorPasswordAsync(_newAuthorDto);
 
             //ASSERT
-            var loginWithNewPasswordOk = await authorRep.LoginAsync(newAuthorDto.Email, newPassword);
+            _newAuthorDto.Password = _newAuthorDto.NewPassword;
+            var loginWithNewPasswordOk = await _client.LoginAsync(_newAuthorDto);
             Assert.IsTrue(updateSuccess, "Author not updated");
             Assert.IsTrue(loginWithNewPasswordOk > 0, "Unable to login with Author's updated password");
         }

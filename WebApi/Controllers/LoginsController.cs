@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using WebApi.DTOs.IncomingOnly;
+using WebApi.DTOs;
 
 namespace WebApi.Controllers
 {
@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 
         // POST api/<LoginController>
         [HttpPost] 
-        public async Task<ActionResult<int>> Post([FromBody] LoginDto loginvalues) =>
+        public async Task<ActionResult<int>> Post([FromBody] AuthorDto loginvalues) =>
             await _authorRepository.LoginAsync(loginvalues.Email, loginvalues.Password);
     }
 }

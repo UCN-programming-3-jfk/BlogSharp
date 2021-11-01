@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using WebApiClient.DTOs;
@@ -12,17 +13,17 @@ public class BlogSharpApiClient
         private RestClient _restClient;
         public BlogSharpApiClient(string uri) => _restClient = new RestClient(new Uri(uri));
 
-        public async Task<int> CreateAuthorAsync(AuthorDto entity, string password)
+        public async Task<int> CreateAuthorAsync(AuthorDto entity)
         {
-            var request = new RestRequest("authors");
-            request.AddJsonBody(new { entity, Password = password });
-            return await _restClient.PostAsync<int>(request);
-
-            //if (!response.IsSuccessful)
-            //{
-            //    throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
-            //}
-            //return response.Data;
+            //var request = new RestRequest("authors", DataFormat.Json);
+            //request.AddJsonBody(entity);
+            //return await _restClient.PostAsync<int>(request);
+            var response = await _restClient.RequestAsync<int>(Method.POST, "authors", entity);
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+            }
+            return response.Data;
         }
         public async Task<IEnumerable<AuthorDto>> GetAllAuthorsAsync()
         {
@@ -48,34 +49,53 @@ public class BlogSharpApiClient
 
         public async Task<bool> UpdateAuthorAsync(AuthorDto entity)
         {
-            var response = await _restClient.RequestAsync<bool>(Method.PUT, "authors", entity);
+            var response = await _restClient.RequestAsync(Method.PUT, $"authors/{entity.Id}", entity);
 
-            if (!response.IsSuccessful)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+                return true;
             }
-            return response.Data;
+            else
+            {
+                throw new Exception($"Error updating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+            }
+            
         }
 
         public async Task<bool> DeleteAuthorAsync(int id)
         {
-            var response = await _restClient.RequestAsync<bool>(Method.DELETE, "authors", id);
+            var response = await _restClient.RequestAsync(Method.DELETE, $"authors/{id}", null);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception($"Error delting author with id={id}. Message was {response.ErrorException?.Message}");
+            }
+        }
 
+        public async Task<bool> UpdateAuthorPasswordAsync(AuthorDto author)
+        {
+            var response = await _restClient.RequestAsync(Method.PUT, $"authors/{author.Id}/Password", author);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception($"Error updating password for author with email={author.Email}. Message was {response.ErrorException?.Message}");
+            }
+        }
+
+        public async Task<int> LoginAsync(AuthorDto author)
+        {
+            var response = await _restClient.RequestAsync<int>(Method.POST, $"logins", author);
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error deleting author with id={id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error deleting author with id={author.Id}. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
-        }
-
-        public async Task<bool> UpdateAuthorPasswordAsync(string email, string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> LoginAsync(string email, string password)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<int> CreateBlogPostAsync(BlogPostDto entity)
@@ -114,12 +134,22 @@ public class BlogSharpApiClient
     {
         public static async Task<IRestResponse<T>> RequestAsync<T>(this RestClient client, Method method, string  resource = null, object body = null)
         {
-             var request = new RestRequest(resource, method);
+             var request = new RestRequest(resource, method, DataFormat.Json);
             if (body != null)
             {
                 request.AddJsonBody(JsonSerializer.Serialize(body));
             }
             return await client.ExecuteAsync<T>(request, method);
+        }
+
+        public static async Task<IRestResponse> RequestAsync(this RestClient client, Method method, string resource = null, object body = null)
+        {
+            var request = new RestRequest(resource, method, DataFormat.Json);
+            if (body != null)
+            {
+                request.AddJsonBody(JsonSerializer.Serialize(body));
+            }
+            return await client.ExecuteAsync(request, method);
         }
 
     }

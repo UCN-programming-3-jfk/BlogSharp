@@ -1,27 +1,26 @@
 ﻿using DataAccess.Model;
 using System.Collections.Generic;
-using WebApi.DTOs.IncomingOnly;
 
 namespace WebApi.DTOs.Converters
 {
     public static class DtoConverter
     {
         #region Author conversion methods
-        public static CreateAuthorDto ToDto(this Author authorToConvert)
+        public static AuthorDto ToDto(this Author authorToConvert)
         {
-            var authorDto = new CreateAuthorDto();
+            var authorDto = new AuthorDto();
             authorToConvert.CopyPropertiesTo(authorDto);
             return authorDto;
         }
 
-        public static Author FromDto(this CreateAuthorDto authorDtoToConvert)
+        public static Author FromDto(this AuthorDto authorDtoToConvert)
         {
             var author = new Author();
             authorDtoToConvert.CopyPropertiesTo(author);
             return author;
         }
 
-        public static IEnumerable<CreateAuthorDto> ToDtos(this IEnumerable<Author> authorsToConvert)
+        public static IEnumerable<AuthorDto> ToDtos(this IEnumerable<Author> authorsToConvert)
         {
             foreach (var author in authorsToConvert)
             {
@@ -29,7 +28,7 @@ namespace WebApi.DTOs.Converters
             }
         }
 
-        public static IEnumerable<Author> FromDtos(this IEnumerable<CreateAuthorDto> authorDtosToConvert)
+        public static IEnumerable<Author> FromDtos(this IEnumerable<AuthorDto> authorDtosToConvert)
         {
             foreach (var authorDto in authorDtosToConvert)
             {
