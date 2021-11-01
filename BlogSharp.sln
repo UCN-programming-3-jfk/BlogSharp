@@ -6,12 +6,15 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7A3D9E4C-9417-43DA-9B14-91FBBFACA487}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingBlogSharp", "TestingBlogSharp\TestingBlogSharp.csproj", "{0720939B-3775-4F9F-AF3C-86AAB3272E8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E82C2893-BB4F-4E5F-B7F7-C90CDA35EE06} = {E82C2893-BB4F-4E5F-B7F7-C90CDA35EE06}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{E82C2893-BB4F-4E5F-B7F7-C90CDA35EE06}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSite", "WebSite\WebSite.csproj", "{DA37976C-E018-41A5-A18E-C7249CE64ABD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiClient", "WebApiClient\WebApiClient.csproj", "{A40FF8A9-234B-48D8-92F6-CC2AA5A761C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiClient", "WebApiClient\WebApiClient.csproj", "{A40FF8A9-234B-48D8-92F6-CC2AA5A761C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

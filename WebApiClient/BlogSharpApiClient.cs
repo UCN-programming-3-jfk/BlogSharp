@@ -14,13 +14,15 @@ public class BlogSharpApiClient
 
         public async Task<int> CreateAuthorAsync(AuthorDto entity, string password)
         {
-            var response = await _restClient.RequestAsync<int>(Method.POST, "authors", new {entity, Password=password});
+            var request = new RestRequest("authors");
+            request.AddJsonBody(new { entity, Password = password });
+            return await _restClient.PostAsync<int>(request);
 
-            if (!response.IsSuccessful)
-            {
-                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.StatusDescription}");
-            }
-            return response.Data;
+            //if (!response.IsSuccessful)
+            //{
+            //    throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+            //}
+            //return response.Data;
         }
         public async Task<IEnumerable<AuthorDto>> GetAllAuthorsAsync()
         {
@@ -28,7 +30,7 @@ public class BlogSharpApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.StatusDescription}");
+                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }
@@ -39,7 +41,7 @@ public class BlogSharpApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.StatusDescription}");
+                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }
@@ -50,14 +52,20 @@ public class BlogSharpApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.StatusDescription}");
+                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }
 
         public async Task<bool> DeleteAuthorAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _restClient.RequestAsync<bool>(Method.DELETE, "authors", id);
+
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error deleting author with id={id}. Message was {response.ErrorException?.Message}");
+            }
+            return response.Data;
         }
 
         public async Task<bool> UpdateAuthorPasswordAsync(string email, string oldPassword, string newPassword)
@@ -76,7 +84,7 @@ public class BlogSharpApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.StatusDescription}");
+                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }

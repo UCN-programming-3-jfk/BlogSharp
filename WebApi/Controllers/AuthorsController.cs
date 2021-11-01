@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using WebApi.DTOs;
 using WebApi.DTOs.Converters;
+using WebApi.DTOs.IncomingOnly;
 
 namespace WebApi.Controllers
 {
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         #region Default CRUD actions
         // GET: api/authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<CreateAuthorDto>>> GetAsync()
         {
             var authors = await _authorRepository.GetAllAsync();
             return Ok(authors.ToDtos());
@@ -33,7 +33,7 @@ namespace WebApi.Controllers
 
         // GET api/authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorDto>> GetAsync(int id)
+        public async Task<ActionResult<CreateAuthorDto>> GetAsync(int id)
         {
             var author = await _authorRepository.GetByIdAsync(id);
             if (author == null) { return NotFound(); }
@@ -42,14 +42,14 @@ namespace WebApi.Controllers
 
         // POST api/authors
         [HttpPost]
-        public async Task<ActionResult<int>> Post([FromBody] AuthorDto newAuthorDto, string password)
+        public async Task<ActionResult<int>> Post([FromBody] CreateAuthorDto newAuthorDto)
         {
-            return Ok(await _authorRepository.CreateAsync(newAuthorDto.FromDto(), password));
+            return Ok(await _authorRepository.CreateAsync(newAuthorDto.FromDto(), newAuthorDto.Password));
         }
 
         // PUT api/authors/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] AuthorDto authorDtoToUpdate)
+        public async Task<ActionResult> Put(int id, [FromBody] CreateAuthorDto authorDtoToUpdate)
         {
             if (!await _authorRepository.UpdateAsync(authorDtoToUpdate.FromDto())) { return NotFound(); }
             { return Ok(); }

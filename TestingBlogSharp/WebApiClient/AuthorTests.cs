@@ -13,10 +13,10 @@ namespace TestingBlogSharp.WebApi
         private int _createdAuthorId;
 
         [TearDown]
-        public void CleanUp()
+        public async Task CleanUp()
         {
             //TearDown methods cannot run async :(
-            Task.Run(() => new BlogSharpApiClient(Configuration.WEB_API_URL).DeleteAuthorAsync(_createdAuthorId)).Wait();
+            await new BlogSharpApiClient(Configuration.WEB_API_URL).DeleteAuthorAsync(_createdAuthorId);
         }
 
         [Test]
@@ -27,10 +27,10 @@ namespace TestingBlogSharp.WebApi
             var newAuthorDto = new AuthorDto() { Email = "Test@testerson.com", BlogTitle = "A grand title" };
             var password = "SuperSecretPassword12345678!";
             //ACT
-            var newAuthorDtoId = await authorRep.CreateAuthorAsync(newAuthorDto, password);
-            _createdAuthorId = newAuthorDtoId;
+            _createdAuthorId = await authorRep.CreateAuthorAsync(newAuthorDto, password);
+            
             //ASSERT
-            Assert.IsTrue(newAuthorDtoId > 0, "Created author ID not returned");
+            Assert.IsTrue(_createdAuthorId > 0, "Created author ID not returned");
         }
 
         [Test]

@@ -2,19 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using WebApi.DTOs;
+using WebApi.DTOs.IncomingOnly;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginsController : ControllerBase
     {
 
         #region Repository and constructor
         IAuthorRepository _authorRepository;
 
-        public LoginController(IConfiguration configuration) =>
+        public LoginsController(IConfiguration configuration) =>
             _authorRepository = new AuthorRepository(configuration.GetConnectionString("DefaultConnection"));
         #endregion
 

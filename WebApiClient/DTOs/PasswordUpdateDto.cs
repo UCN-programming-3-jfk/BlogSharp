@@ -1,4 +1,4 @@
-﻿namespace WebApi.DTOs
+﻿namespace WebApiClient.DTOs
 {
     public class PasswordUpdateDto
     {
