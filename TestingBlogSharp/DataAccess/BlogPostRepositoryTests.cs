@@ -1,6 +1,5 @@
 using DataAccess.Repositories;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Model;
@@ -8,36 +7,38 @@ using System;
 
 namespace TestingBlogSharp.DataAccess
 {
-    public class BlogPostRepositoryTests
+    public class _blogPostRepositoryTests
     {
-
-        private int NewAuthorId { get; set; }
-        private List<int> _createdBlogPostIds = new();
+        //TODO: add test to test cascading delete of BlogPosts with their Author
+        
+        private AuthorRepository _authorRepository;
+        private BlogPostRepository _blogPostRepository;
+        private Author _newAuthor;
+        private BlogPost _newBlogPost;
 
         [SetUp]
-        public void Setup()
+        public async Task SetupAsync()
         {
-            //SetUp methods cannot run async :(
-            NewAuthorId = Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).CreateAsync(new Author() { Email="mail@myblog.com", BlogTitle="Title of my blog"}, "test")).Result;
+            _authorRepository = new AuthorRepository(Configuration.CONNECTION_STRING);
+            _blogPostRepository= new BlogPostRepository(Configuration.CONNECTION_STRING);
+            _newAuthor = new Author() { Email = "mail@myblog.com", BlogTitle = "Title of my blog" };
+            _newAuthor.Id = await _authorRepository.CreateAsync(_newAuthor, "test1234");
+            _newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = System.DateTime.Now };
+            _newBlogPost.Id = await _blogPostRepository.CreateAsync(_newBlogPost);
         }
 
         [TearDown]
-        public void CleanUp()
+        public async Task CleanUpAsync()
         {
-            //TearDown methods cannot run async :(
-            Task.Run(() => new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(NewAuthorId)).Wait();
+            await new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(_newAuthor.Id);
         }
 
         [Test]
         public async Task GetBlogPostsAsync()
         {
             //ARRANGE
-            var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
-            var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
-            _createdBlogPostIds.Add(newBlogPostId);
             //ACT
-            var blogposts = await blogpostRep.GetAllAsync();
+            var blogposts = await _blogPostRepository.GetAllAsync();
             //ASSERT
             Assert.IsTrue(blogposts.Count() > 0, "No blog posts returned");
         }
@@ -46,25 +47,17 @@ namespace TestingBlogSharp.DataAccess
         public async Task CreateBlogPostAsync()
         {
             //ARRANGE
-            var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId= NewAuthorId, PostContent="Content", PostCreationDate = System.DateTime.Now };
             //ACT
-            var newBlogPostId = await blogpostRep.CreateAsync(newBlogPost);
-            _createdBlogPostIds.Add(newBlogPostId);
             //ASSERT
-            Assert.IsTrue(newBlogPostId > 0, "Created blogpost ID not returned");
+            Assert.IsTrue(_newBlogPost.Id > 0, "Created blogpost ID not returned");
         }
 
         [Test]
         public async Task DeleteBlogPostAsync()
         {
             //ARRANGE
-            var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
-            var newId = await blogpostRep.CreateAsync(newBlogPost);
-            _createdBlogPostIds.Add(newId);
             //ACT
-            bool deleted = await blogpostRep.DeleteAsync(newId);
+            bool deleted = await _blogPostRepository.DeleteAsync(_newBlogPost.Id);
             //ASSERT
             Assert.IsTrue(deleted, "BlogPost not deleted");
         }
@@ -73,12 +66,8 @@ namespace TestingBlogSharp.DataAccess
         public async Task FindBlogPostAsync()
         {
             //ARRANGE
-            var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
-            var newId = await blogpostRep.CreateAsync(newBlogPost);
-            _createdBlogPostIds.Add(newId);
             //ACT
-            var refoundBlogPost = await blogpostRep.GetByIdAsync(newId);
+            var refoundBlogPost = await _blogPostRepository.GetByIdAsync(_newBlogPost.Id);
             //ASSERT
             Assert.IsTrue(refoundBlogPost != null, "BlogPost not found again");
         }
@@ -90,17 +79,13 @@ namespace TestingBlogSharp.DataAccess
             string updatedPostTitle = "A great new post";
             string updatedPostContent = "Even greater content";
             DateTime updatedPostDate = DateTime.Now.AddDays(-3);
-            var blogpostRep = new BlogPostRepository(Configuration.CONNECTION_STRING);
-            var newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = NewAuthorId, PostContent = "Content", PostCreationDate = System.DateTime.Now };
-            newBlogPost.Id = await blogpostRep.CreateAsync(newBlogPost);
-            newBlogPost.PostTitle = updatedPostTitle;
-            newBlogPost.PostContent = updatedPostContent;
-            newBlogPost.PostCreationDate = updatedPostDate;
-            _createdBlogPostIds.Add(newBlogPost.Id);
+            _newBlogPost.PostTitle = updatedPostTitle;
+            _newBlogPost.PostContent = updatedPostContent;
+            _newBlogPost.PostCreationDate = updatedPostDate;
             //ACT
-            await blogpostRep.UpdateAsync(newBlogPost);
+            await _blogPostRepository.UpdateAsync(_newBlogPost);
             //ASSERT
-            var refoundBlogPost = await blogpostRep.GetByIdAsync(newBlogPost.Id);
+            var refoundBlogPost = await _blogPostRepository.GetByIdAsync(_newBlogPost.Id);
             Assert.IsTrue(refoundBlogPost.PostTitle == updatedPostTitle && refoundBlogPost.PostContent == updatedPostContent 
                 && refoundBlogPost.PostCreationDate.Year == updatedPostDate.Year
                 && refoundBlogPost.PostCreationDate.Month == updatedPostDate.Month

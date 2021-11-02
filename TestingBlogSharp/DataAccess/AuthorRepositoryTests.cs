@@ -7,7 +7,7 @@ using DataAccess.Model;
 namespace TestingBlogSharp.DataAccess
 {
 
-    //TODO: add test to test cascading delete of BlogPosts with their Author
+    
     public class AuthorRepositoryTests
     {
         private Author _newAuthor;
@@ -24,7 +24,7 @@ namespace TestingBlogSharp.DataAccess
         [TearDown]
         public async Task CleanUp()
         {
-            await new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(_newAuthor.Id);
+            await _authorRepository.DeleteAsync(_newAuthor.Id);
         }
 
         private async Task<Author> CreateNewAuthorAsync()

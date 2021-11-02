@@ -15,9 +15,6 @@ public class BlogSharpApiClient
 
         public async Task<int> CreateAuthorAsync(AuthorDto entity)
         {
-            //var request = new RestRequest("authors", DataFormat.Json);
-            //request.AddJsonBody(entity);
-            //return await _restClient.PostAsync<int>(request);
             var response = await _restClient.RequestAsync<int>(Method.POST, "authors", entity);
             if (!response.IsSuccessful)
             {
