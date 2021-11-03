@@ -16,9 +16,9 @@ namespace WebApi.Controllers
         #region Repository and constructor
         IAuthorRepository _authorRepository;
 
-        public AuthorsController(IConfiguration configuration)
+        public AuthorsController(IAuthorRepository authorRepository)
         {
-            _authorRepository = new AuthorRepository(configuration.GetConnectionString("DefaultConnection"));
+            _authorRepository = authorRepository;
         }
         #endregion
 

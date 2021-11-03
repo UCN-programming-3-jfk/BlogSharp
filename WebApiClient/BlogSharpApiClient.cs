@@ -68,7 +68,7 @@ public class BlogSharpApiClient
             }
             else
             {
-                throw new Exception($"Error delting author with id={id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error deleting author with id={id}. Message was {response.ErrorException?.Message}");
             }
         }
 
@@ -97,33 +97,63 @@ public class BlogSharpApiClient
 
         public async Task<int> CreateBlogPostAsync(BlogPostDto entity)
         {
-            var response = await _restClient.ExecuteAsync<int>(new RestRequest());
+            var response = await _restClient.RequestAsync<int>(Method.POST, $"blogposts", entity);
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error creating blogpost. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }
 
         public async Task<IEnumerable<BlogPostDto>> GetAllBlogPostsAsync()
         {
-            throw new NotImplementedException();
+            var response = await _restClient.RequestAsync<IEnumerable<BlogPostDto>>(Method.GET, $"blogposts");
+
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving all blogposts. Message was {response.ErrorException?.Message}");
+            }
+            return response.Data;
         }
 
         public async Task<BlogPostDto> GetBlogPostByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _restClient.RequestAsync<BlogPostDto>(Method.GET, $"blogposts/{id}");
+
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving blogpost with id {id} . Message was {response.ErrorException?.Message}");
+            }
+            return response.Data;
         }
 
         public async Task<bool> UpdateBlogPostAsync(BlogPostDto entity)
         {
-            throw new NotImplementedException();
+            var response = await _restClient.RequestAsync(Method.PUT, $"blogposts/{entity.Id}", entity);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception($"Error updating blogpost with id={entity.Id}. Message was {response.ErrorException?.Message}");
+            }
+
         }
 
         public async Task<bool> DeleteBlogPostAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _restClient.RequestAsync(Method.DELETE, $"blogposts/{id}", null);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception($"Error deleting blogpost with id={id}. Message was {response.ErrorException?.Message}");
+            }
         }
     }
 

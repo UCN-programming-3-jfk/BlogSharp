@@ -38,11 +38,10 @@ namespace TestingBlogSharp.WebApi
         }
 
         [Test]
-        public async Task CreateAuthorAsync()
+        public void CreateAuthor()
         {
             //ARRANGE
             //ACT
-            
             
             //ASSERT
             Assert.IsTrue(_newAuthorDto.Id > 0, "Created author ID not returned");
