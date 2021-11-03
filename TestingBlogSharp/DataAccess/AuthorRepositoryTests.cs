@@ -71,7 +71,18 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var refoundAuthor = await _authorRepository.GetByIdAsync(_newAuthor.Id);
             //ASSERT
-            Assert.IsTrue(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again");
+            Assert.IsTrue(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by id");
+        }
+
+        [Test]
+        public async Task FindAuthorByEmailAsync()
+        {
+            //ARRANGE is done in Setup()
+
+            //ACT
+            var refoundAuthor = await _authorRepository.GetByEmailAsync(_newAuthor.Email);
+            //ASSERT
+            Assert.IsTrue(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by email");
         }
 
         [Test]

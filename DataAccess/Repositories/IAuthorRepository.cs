@@ -10,6 +10,7 @@ namespace DataAccess.Repositories
         Task<int> CreateAsync(Author entity, string password);
         Task<IEnumerable<Author>> GetAllAsync();
         Task<Author> GetByIdAsync(int id);
+        Task<Author> GetByEmailAsync(string email);
         Task<bool> UpdateAsync(Author entity);
         Task<bool> DeleteAsync(int id);
 

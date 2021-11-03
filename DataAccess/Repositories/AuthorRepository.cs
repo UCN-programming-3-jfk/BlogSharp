@@ -125,6 +125,20 @@ public async Task<IEnumerable<Author>> GetAllAsync()
             }
         }
 
+        public async Task<Author> GetByEmailAsync(string email)
+        {
+            try
+            {
+                var query = "SELECT * FROM Author WHERE Email=@Email";
+                using var connection = CreateConnection();
+                return await connection.QuerySingleAsync<Author>(query, new { email });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting author with email {email}: '{ex.Message}'.", ex);
+            }
+        }
+
         internal class AuthorTuple 
         {
             public int Id;

@@ -4,11 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiClient;
+using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
     public class AuthorController : Controller
     {
+
+        private IBlogSharpApiClient _client;
+
+        public AuthorController(IBlogSharpApiClient client)
+        {
+            _client = client;
+        }
+
+
         // GET: AuthorController
         public ActionResult Index()
         {
@@ -30,13 +41,14 @@ namespace WebSite.Controllers
         // POST: AuthorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(AuthorDto author)
         {
             try
             {
+                await _client.CreateAuthorAsync(author);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
@@ -51,7 +63,7 @@ namespace WebSite.Controllers
         // POST: AuthorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, AuthorDto author)
         {
             try
             {
@@ -72,7 +84,7 @@ namespace WebSite.Controllers
         // POST: AuthorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, AuthorDto author)
         {
             try
             {

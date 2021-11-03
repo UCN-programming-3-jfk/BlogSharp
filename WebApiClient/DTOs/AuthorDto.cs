@@ -1,4 +1,6 @@
-﻿namespace WebApiClient.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApiClient.DTOs
 {
     public class AuthorDto
     {

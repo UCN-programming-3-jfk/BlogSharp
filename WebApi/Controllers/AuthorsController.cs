@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataAccess.Model;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +26,11 @@ namespace WebApi.Controllers
         #region Default CRUD actions
         // GET: api/authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAsync([FromQuery] string email)
         {
-            var authors = await _authorRepository.GetAllAsync();
+            IEnumerable<Author> authors = null;
+            if (!string.IsNullOrEmpty(email)) { authors = new List<Author>() { await _authorRepository.GetByEmailAsync(email) }; }
+            else { authors = await _authorRepository.GetAllAsync(); }
             return Ok(authors.ToDtos());
         }
 

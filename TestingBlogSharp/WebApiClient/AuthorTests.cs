@@ -79,6 +79,17 @@ namespace TestingBlogSharp.WebApi
         }
 
         [Test]
+        public async Task FindAuthorByEmailAsync()
+        {
+            //ARRANGE
+            //ACT
+            var refoundAuthor = await _client.GetAuthorByEmailAsync(_newAuthorDto.Email);
+
+            //ASSERT
+            Assert.IsTrue(_newAuthorDto.Id == refoundAuthor.Id && _newAuthorDto.Email == refoundAuthor.Email && _newAuthorDto.BlogTitle == refoundAuthor.BlogTitle, "Author not found again");
+        }
+
+        [Test]
         public async Task UpdateAuthorAsync()
         {
             //ARRANGE

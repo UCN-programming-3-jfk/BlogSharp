@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,8 +9,8 @@ using WebApiClient.DTOs;
 
 namespace WebApiClient
 {
-public class BlogSharpApiClient
-{
+    public class BlogSharpApiClient : IBlogSharpApiClient
+    {
         private RestClient _restClient;
         public BlogSharpApiClient(string uri) => _restClient = new RestClient(new Uri(uri));
 
@@ -56,7 +57,7 @@ public class BlogSharpApiClient
             {
                 throw new Exception($"Error updating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
             }
-            
+
         }
 
         public async Task<bool> DeleteAuthorAsync(int id)
@@ -70,6 +71,17 @@ public class BlogSharpApiClient
             {
                 throw new Exception($"Error deleting author with id={id}. Message was {response.ErrorException?.Message}");
             }
+        }
+
+        public async Task<AuthorDto> GetAuthorByEmailAsync(string email)
+        {
+            var response = await _restClient.RequestAsync<IEnumerable<AuthorDto>>(Method.GET, $"authors?email={email}");
+
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
+            }
+            return response.Data.FirstOrDefault();
         }
 
         public async Task<bool> UpdateAuthorPasswordAsync(AuthorDto author)
@@ -90,7 +102,7 @@ public class BlogSharpApiClient
             var response = await _restClient.RequestAsync<int>(Method.POST, $"logins", author);
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error deleting author with id={author.Id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error logging in for author with email={author.Email}. Message was {response.ErrorException?.Message}");
             }
             return response.Data;
         }
