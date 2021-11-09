@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         #region Default CRUD actions
         // GET: api/<BlogPostController>?authorid=23
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPostDto>>> Get([FromQuery] int? authorId)
+        public async Task<ActionResult<IEnumerable<BlogPostDto>>> Get([FromQuery] int? authorId, [FromQuery] string filter)
         {
 
             IEnumerable<BlogPost> posts;
@@ -34,6 +34,10 @@ namespace WebApi.Controllers
             if (authorId.HasValue)
             {
                 posts = await _blogpostRepository.GetByAuthorIdAsync(authorId.Value);
+            }
+            if (!string.IsNullOrEmpty(filter) && filter == "getlatest10")
+            {
+                posts = await _blogpostRepository.Get10LatestAsync();
             }
             else
             {

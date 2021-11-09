@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -45,16 +46,23 @@ namespace WebSite.Controllers
         {
             try
             {
-                await _client.CreateAuthorAsync(author);
-                return RedirectToAction(nameof(Index));
+                if (await _client.CreateAuthorAsync(author) > 0)
+                { return RedirectToAction(nameof(Index)); }
+                else
+                {
+                    ViewBag.ErrorMessage = "User not created!";
+                    return View();
+                }
             }
             catch (Exception ex)
             {
+                ViewBag.ErrorMessage = ex.Message;
                 return View();
             }
         }
 
         // GET: AuthorController/Edit/5
+        [Authorize(Roles = "Author")]
         public ActionResult Edit(int id)
         {
             return View();
@@ -63,6 +71,7 @@ namespace WebSite.Controllers
         // POST: AuthorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Author")]
         public ActionResult Edit(int id, AuthorDto author)
         {
             try
@@ -76,6 +85,7 @@ namespace WebSite.Controllers
         }
 
         // GET: AuthorController/Delete/5
+        [Authorize(Roles = "Author")]
         public ActionResult Delete(int id)
         {
             return View();
@@ -84,6 +94,7 @@ namespace WebSite.Controllers
         // POST: AuthorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Author")]
         public ActionResult Delete(int id, AuthorDto author)
         {
             try

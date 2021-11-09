@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 using WebApiClient.DTOs;
 
@@ -19,7 +18,7 @@ namespace WebApiClient
             var response = await _restClient.RequestAsync<int>(Method.POST, "authors", entity);
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error creating author with email={entity.Email}. Message was {response.Content}");
             }
             return response.Data;
         }
@@ -29,7 +28,7 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error retrieving all authors. Message was {response.Content}");
             }
             return response.Data;
         }
@@ -40,7 +39,7 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error retrieving all authors. Message was {response.Content}");
             }
             return response.Data;
         }
@@ -55,7 +54,7 @@ namespace WebApiClient
             }
             else
             {
-                throw new Exception($"Error updating author with email={entity.Email}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error updating author with email={entity.Email}. Message was {response.Content}");
             }
 
         }
@@ -69,7 +68,7 @@ namespace WebApiClient
             }
             else
             {
-                throw new Exception($"Error deleting author with id={id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error deleting author with id={id}. Message was {response.Content}");
             }
         }
 
@@ -79,7 +78,7 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all authors. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error retrieving all authors. Message was {response.Content}");
             }
             return response.Data.FirstOrDefault();
         }
@@ -93,7 +92,7 @@ namespace WebApiClient
             }
             else
             {
-                throw new Exception($"Error updating password for author with email={author.Email}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error updating password for author with email={author.Email}. Message was {response.Content}");
             }
         }
 
@@ -102,7 +101,7 @@ namespace WebApiClient
             var response = await _restClient.RequestAsync<int>(Method.POST, $"logins", author);
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error logging in for author with email={author.Email}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error logging in for author with email={author.Email}. Message was {response.Content}");
             }
             return response.Data;
         }
@@ -113,7 +112,7 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error creating blogpost. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error creating blogpost. Message was {response.Content}");
             }
             return response.Data;
         }
@@ -124,10 +123,23 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving all blogposts. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error retrieving all blogposts. Message was {response.Content}");
             }
             return response.Data;
         }
+
+        public async Task<IEnumerable<BlogPostDto>> Get10LatestBlogPostsAsync()
+        {
+            var request = new RestRequest($"blogposts", Method.GET, DataFormat.Json);
+            request.AddParameter("filter", "getlatest10");
+            var response = await _restClient.ExecuteAsync<IEnumerable<BlogPostDto>>(request);
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving latest blogposts. Message was {response.Content}");
+            }
+            return response.Data;
+        }
+
 
         public async Task<BlogPostDto> GetBlogPostByIdAsync(int id)
         {
@@ -135,7 +147,7 @@ namespace WebApiClient
 
             if (!response.IsSuccessful)
             {
-                throw new Exception($"Error retrieving blogpost with id {id} . Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error retrieving blogpost with id {id} . Message was {response.Content}");
             }
             return response.Data;
         }
@@ -150,7 +162,7 @@ namespace WebApiClient
             }
             else
             {
-                throw new Exception($"Error updating blogpost with id={entity.Id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error updating blogpost with id={entity.Id}. Message was {response.Content}");
             }
 
         }
@@ -164,32 +176,8 @@ namespace WebApiClient
             }
             else
             {
-                throw new Exception($"Error deleting blogpost with id={id}. Message was {response.ErrorException?.Message}");
+                throw new Exception($"Error deleting blogpost with id={id}. Message was {response.Content}");
             }
         }
-    }
-
-    public static class RestClientExtensions
-    {
-        public static async Task<IRestResponse<T>> RequestAsync<T>(this RestClient client, Method method, string  resource = null, object body = null)
-        {
-             var request = new RestRequest(resource, method, DataFormat.Json);
-            if (body != null)
-            {
-                request.AddJsonBody(JsonSerializer.Serialize(body));
-            }
-            return await client.ExecuteAsync<T>(request, method);
-        }
-
-        public static async Task<IRestResponse> RequestAsync(this RestClient client, Method method, string resource = null, object body = null)
-        {
-            var request = new RestRequest(resource, method, DataFormat.Json);
-            if (body != null)
-            {
-                request.AddJsonBody(JsonSerializer.Serialize(body));
-            }
-            return await client.ExecuteAsync(request, method);
-        }
-
     }
 }

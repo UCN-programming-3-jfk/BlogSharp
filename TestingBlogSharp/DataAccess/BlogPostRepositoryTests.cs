@@ -44,7 +44,7 @@ namespace TestingBlogSharp.DataAccess
         }
 
         [Test]
-        public async Task CreateBlogPostAsync()
+        public void CreateBlogPost()
         {
             //ARRANGE
             //ACT
@@ -70,6 +70,23 @@ namespace TestingBlogSharp.DataAccess
             var refoundBlogPost = await _blogPostRepository.GetByIdAsync(_newBlogPost.Id);
             //ASSERT
             Assert.IsTrue(refoundBlogPost != null, "BlogPost not found again");
+        }
+
+
+        [Test]
+        public async Task GetLatestBlogPostsAsync()
+        {
+            //ARRANGE
+            for (int blogPostCounter = 0; blogPostCounter < 15; blogPostCounter++)
+            {
+                var blogPost = new BlogPost() {AuthorId = _newAuthor.Id, PostCreationDate = DateTime.Now.AddDays(-blogPostCounter), PostContent="Great content", PostTitle=$"Great title {blogPostCounter}" };
+                await _blogPostRepository.CreateAsync(blogPost);
+            }
+            
+            //ACT
+            var refoundBlogPosts = await _blogPostRepository.Get10LatestAsync();
+            //ASSERT
+            Assert.IsTrue(refoundBlogPosts.Count() == 10, "BlogPost not found again");
         }
 
         [Test]

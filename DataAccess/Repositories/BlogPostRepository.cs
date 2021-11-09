@@ -94,6 +94,19 @@ namespace DataAccess.Repositories
                 throw new Exception($"Error getting blog posts with authorid {authorId}: '{ex.Message}'.", ex);
             }
         }
-   
+
+        public async Task<IEnumerable<BlogPost>> Get10LatestAsync()
+        {
+            try
+            {
+                var query = "SELECT top 10 * FROM BlogPost ORDER BY PostCreationDate DESC";
+                using var connection = CreateConnection();
+                return await connection.QueryAsync<BlogPost>(query, new { amount=10 });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting latest blog posts: '{ex.Message}'.", ex);
+            }
+        }
     }
 }

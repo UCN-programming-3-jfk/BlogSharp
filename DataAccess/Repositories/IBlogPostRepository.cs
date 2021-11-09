@@ -13,5 +13,6 @@ namespace DataAccess.Repositories
         Task<bool> DeleteAsync(int id);
 
         Task<IEnumerable<BlogPost>> GetByAuthorIdAsync(int authorId);
+        Task<IEnumerable<BlogPost>> Get10LatestAsync();
     }
 }
