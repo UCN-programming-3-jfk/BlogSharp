@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApiClient;
+using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
@@ -35,27 +38,31 @@ public async Task<ActionResult> Details(int id)
     return View(model);
 }
 
-        // GET: BlogPostController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        // GET: BlogPostsController/Create
+        [Authorize]
+        public ActionResult Create() => View();
 
-        // POST: BlogPostController/Create
+        // POST: BlogPostsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Authorize]
+        public async Task<ActionResult> Create(BlogPostDto newBlogPost)
         {
-            //First get user claims    
-            //var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
-            //Filter specific claim    
-            //claims?.FirstOrDefault(x => x.Type.Equals("UserName", StringComparison.OrdinalIgnoreCase))?.Value
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            string userIdValue = claims.Where(c => c.Type == "user_id").FirstOrDefault()?.Value;
+
+            newBlogPost.AuthorId = int.Parse(userIdValue);
+            newBlogPost.PostCreationDate = DateTime.Now;
             try
             {
-                return RedirectToAction(nameof(Index));
+                newBlogPost.Id = await _client.CreateBlogPostAsync(newBlogPost);
+                TempData["Message"] = "Blog post created";
+                return RedirectToAction(nameof(Details), new {Id=newBlogPost.Id});
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.ErrorMessage = ex.Message;
                 return View();
             }
         }

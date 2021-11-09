@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApiClient;
@@ -56,6 +55,8 @@ namespace WebSite.Controllers
             return View();
         }
 
+       
+
         //creates the authentication cookie with claims
         private async Task SignInUsingClaims(List<Claim> claims)
         {
@@ -106,5 +107,7 @@ namespace WebSite.Controllers
         {
             return View();
         }
+
+ 
     }
 }

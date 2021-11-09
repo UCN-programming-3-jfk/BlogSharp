@@ -25,6 +25,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Create">Create new profile</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="BlogPosts" asp-action="Create">Write new blog post</a>
+                        </li>
+                        <li class="nav-item">
                             @if (Context.User.Identity.IsAuthenticated)
                             {
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="LogOut">Log out</a>
