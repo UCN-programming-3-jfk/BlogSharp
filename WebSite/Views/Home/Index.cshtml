@@ -1,9 +1,18 @@
-﻿@{
+﻿@*declare the model we will be using as a dynamic*@
+@model dynamic
+@{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <a class="nav-link text-dark" asp-controller="Author" asp-action="Create">Create profile</a>
-    <a class="nav-link text-dark" asp-controller="Login" asp-action="Create">Log in</a>
+    <h4>Latest blog posts</h4>
+    <div>
+        @*iterate over all the BlogPostDtos in the model*@
+        @foreach (dynamic post in @Model.BlogPosts)
+        {
+            @*create a link (<A href...>) for each blog post 
+                which points to the BlogPost controller's details view
+                and sends the ID of the blog post *@
+            <br />@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })
+        }
+    </div>
 </div>

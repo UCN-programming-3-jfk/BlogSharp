@@ -1,27 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Dynamic;
 using System.Threading.Tasks;
+using WebApiClient;
 using WebSite.Models;
 
 namespace WebSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IBlogSharpApiClient _client;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IBlogSharpApiClient client)
         {
-            _logger = logger;
+            _client = client;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+public async Task<IActionResult> Index()
+{
+    dynamic model = new ExpandoObject();
+    model.BlogPosts = await _client.Get10LatestBlogPostsAsync();
+    return View(model);
+}
 
         public IActionResult Privacy()
         {

@@ -22,19 +22,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Author" asp-action="Edit">Edit Profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Create">Create new profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Create">Log in</a>
+                            @if (Context.User.Identity.IsAuthenticated)
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="LogOut">Log out</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="LogIn">Log in</a>
+                            }
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <span>@TempData["message"]</span>
+
     <div class="container">
+        <span style="background-color:azure">@TempData["Message"]</span>
         <main role="main" class="pb-3">
+
             @RenderBody()
         </main>
     </div>

@@ -10,12 +10,12 @@ using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
-    public class AuthorController : Controller
+    public class AuthorsController : Controller
     {
 
         private IBlogSharpApiClient _client;
 
-        public AuthorController(IBlogSharpApiClient client)
+        public AuthorsController(IBlogSharpApiClient client)
         {
             _client = client;
         }
@@ -42,23 +42,33 @@ namespace WebSite.Controllers
         // POST: AuthorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(AuthorDto author)
+        public async Task<ActionResult> Create(AuthorDto author)
         {
-            try
+            ModelState.Remove("NewPassword");
+            if (!ModelState.IsValid)
             {
-                if (await _client.CreateAuthorAsync(author) > 0)
-                { return RedirectToAction(nameof(Index)); }
-                else
-                {
-                    ViewBag.ErrorMessage = "User not created!";
-                    return View();
-                }
+                ViewBag.ErrorMessage = "User not created - error in submitted data!";
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-                return View();
-            }
+else
+{
+    try
+    {
+        if (await _client.CreateAuthorAsync(author) > 0)
+        {
+            TempData["Message"] = $"User {author.Email} created!";
+            return RedirectToAction(nameof(Index), "Home"); 
+        }
+        else
+        {
+            ViewBag.ErrorMessage = "User not created!";
+        }
+    }
+    catch (Exception ex)
+    {
+        ViewBag.ErrorMessage = ex.Message;
+    }
+}
+return View();
         }
 
         // GET: AuthorController/Edit/5

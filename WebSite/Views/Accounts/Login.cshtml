@@ -1,0 +1,39 @@
+﻿@model WebApiClient.DTOs.AuthorDto
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<h1>Login</h1>
+
+@if (!Context.User.Identity.IsAuthenticated)
+{
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Login">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label" required></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" type="password" required />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <span style="background-color:wheat; color:red;">@ViewBag.ErrorMessage</span>
+    <div>
+        <a asp-action="Index" asp-controller="Home">Back to front page</a>
+    </div>
+}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

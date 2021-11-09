@@ -12,6 +12,7 @@ namespace WebApiClient
         Task<bool> DeleteBlogPostAsync(int id);
         Task<IEnumerable<AuthorDto>> GetAllAuthorsAsync();
         Task<IEnumerable<BlogPostDto>> GetAllBlogPostsAsync();
+        Task<IEnumerable<BlogPostDto>> Get10LatestBlogPostsAsync();
         Task<AuthorDto> GetAuthorByIdAsync(int id);
         Task<BlogPostDto> GetBlogPostByIdAsync(int id);
         Task<int> LoginAsync(AuthorDto author);

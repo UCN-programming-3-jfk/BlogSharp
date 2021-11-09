@@ -10,7 +10,7 @@ using WebSite.Models;
 
 namespace WebSite.Controllers
 {
-    public class LoginController : Controller
+    public class LoginsController : Controller
     {
         // GET: LoginController
         public ActionResult Index()

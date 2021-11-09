@@ -11,12 +11,12 @@ using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
-    public class AccountController : Controller
+    public class AccountsController : Controller
     {
 
         IBlogSharpApiClient _client;
 
-        public AccountController(IBlogSharpApiClient client)
+        public AccountsController(IBlogSharpApiClient client)
         {
             _client = client;
         }
@@ -29,8 +29,9 @@ namespace WebSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromForm] AuthorDto loginInfo, [FromQuery] string returnUrl)
         {
+            //TODO: consider changing the Login signature to return the entire Author...?
             int userId = await _client.LoginAsync(loginInfo);
-            
+
             if (userId > 0)
             {
                 var user = await _client.GetAuthorByIdAsync(userId);
@@ -44,17 +45,16 @@ namespace WebSite.Controllers
                 await SignInUsingClaims(claims);
                 TempData["Message"] = $"You are logged in as {user.Email}";
             }
+            else
+            {
+                ViewBag.ErrorMessage = "Incorrect login";
+            }
             if (string.IsNullOrEmpty(returnUrl))
             {
                 return RedirectToAction();
             }
             return View();
         }
-
-        //First get user claims    
-        //var claims = ClaimsPrincipal.Current.Identities.First().Claims.ToList();
-        //Filter specific claim    
-        //claims?.FirstOrDefault(x => x.Type.Equals("UserName", StringComparison.OrdinalIgnoreCase))?.Value
 
         //creates the authentication cookie with claims
         private async Task SignInUsingClaims(List<Claim> claims)
@@ -91,8 +91,6 @@ namespace WebSite.Controllers
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity),
                 authProperties);
-
-            
         }
 
         //deletes the authentication cooke
@@ -109,5 +107,4 @@ namespace WebSite.Controllers
             return View();
         }
     }
-
 }

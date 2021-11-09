@@ -1,0 +1,16 @@
+﻿@using WebApiClient.DTOs
+@model dynamic
+
+@{
+    ViewData["Title"] = Model.BlogPost.PostTitle;
+}
+
+<div class="text-center">
+    <h1>@Model.BlogPost.PostTitle</h1>
+    <h4>By: @Model.Author.Email</h4>
+    <hr />
+    @Model.BlogPost.PostContent
+</div>
+<div style="text-align:right;">
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>

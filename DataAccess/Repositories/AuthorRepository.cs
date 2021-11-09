@@ -92,8 +92,8 @@ public async Task<IEnumerable<Author>> GetAllAsync()
                 var query = "SELECT Id, PasswordHash FROM Author WHERE Email=@Email";
                 using var connection = CreateConnection();
 
-                var authorTuple = await connection.QuerySingleAsync<AuthorTuple>(query, new { Email = email});
-                if (BCryptTool.ValidatePassword(password, authorTuple.PasswordHash))
+                var authorTuple = await connection.QueryFirstOrDefaultAsync<AuthorTuple>(query, new { Email = email});
+                if (authorTuple != null && BCryptTool.ValidatePassword(password, authorTuple.PasswordHash))
                 {
                     return authorTuple.Id;
                 }
