@@ -9,18 +9,25 @@ using WebApi.DTOs.Converters;
 
 namespace WebApi.Controllers
 {
+
+    /// <summary>
+    /// This class provides basic CRUD functionality for BlogPosts in the system.
+    /// The controller receives a blogposts repository in its constructor, thereby lowering the coupling
+    /// and enabling the class responsible for creating the controller to provide any implementation of IBlogPostRepository
+    /// for testing purposes or for using a specific persistence mechanism (database/file/service/etc.)
+    /// </summary>
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class BlogPostsController : ControllerBase
     {
 
         #region Repository and constructor
+        //The repository the controller should use for persistence
         IBlogPostRepository _blogpostRepository;
 
-        public BlogPostsController(IConfiguration configuration)
-        {
-            _blogpostRepository = new BlogPostRepository(configuration.GetConnectionString("DefaultConnection"));
-        }
+        public BlogPostsController(IBlogPostRepository repository) => _blogpostRepository = repository;
         #endregion
 
         #region Default CRUD actions

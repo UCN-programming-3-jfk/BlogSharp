@@ -12,6 +12,15 @@ using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
+
+    /// <summary>
+    /// This class implements the ASP.NET Core MVC controller which is mapped to the "/Authors" URI.
+    /// It provides access to CRUD functionality for the AuthorDTO.
+    /// Notice the [Authorize] attribute on the Create, Edit and Delete actions, which demands the user is authenticated
+    /// and will redirect to "/accounts/login" if necessary.
+    /// </summary>
+
+
     public class BlogPostsController : Controller
     {
 
@@ -28,15 +37,15 @@ namespace WebSite.Controllers
         }
 
         // GET: BlogPostController/Details/5
-public async Task<ActionResult> Details(int id)
-{
-    var blogPost = await _client.GetBlogPostByIdAsync(id);
-    var author = await _client.GetAuthorByIdAsync(blogPost.AuthorId);
-    dynamic model = new ExpandoObject();
-    model.BlogPost = blogPost;
-    model.Author = author;
-    return View(model);
-}
+        public async Task<ActionResult> Details(int id)
+        {
+            var blogPost = await _client.GetBlogPostByIdAsync(id);
+            var author = await _client.GetAuthorByIdAsync(blogPost.AuthorId);
+            dynamic model = new ExpandoObject();
+            model.BlogPost = blogPost;
+            model.Author = author;
+            return View(model);
+        }
 
         // GET: BlogPostsController/Create
         [Authorize]
@@ -58,7 +67,7 @@ public async Task<ActionResult> Details(int id)
             {
                 newBlogPost.Id = await _client.CreateBlogPostAsync(newBlogPost);
                 TempData["Message"] = "Blog post created";
-                return RedirectToAction(nameof(Details), new {Id=newBlogPost.Id});
+                return RedirectToAction(nameof(Details), new { Id = newBlogPost.Id });
             }
             catch (Exception ex)
             {
@@ -68,6 +77,7 @@ public async Task<ActionResult> Details(int id)
         }
 
         // GET: BlogPostController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             return View();
@@ -76,6 +86,7 @@ public async Task<ActionResult> Details(int id)
         // POST: BlogPostController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
@@ -97,6 +108,7 @@ public async Task<ActionResult> Details(int id)
         // POST: BlogPostController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

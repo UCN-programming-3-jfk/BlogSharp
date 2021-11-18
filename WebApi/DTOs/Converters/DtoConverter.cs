@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace WebApi.DTOs.Converters
 {
+    /// <summary>
+    /// Tool class for storing extension methods for converting DTOs to Model objects and back
+    /// </summary>
     public static class DtoConverter
     {
         #region Author conversion methods

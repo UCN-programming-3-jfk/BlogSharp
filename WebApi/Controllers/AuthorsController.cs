@@ -9,18 +9,23 @@ using WebApi.DTOs.Converters;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// This class provides basic CRUD functionality for Authors in the system.
+    /// The controller receives an author repository in its constructor, thereby lowering the coupling
+    /// and enabling the class responsible for creating the controller to provide any implementation of IAuthorRepository
+    /// for testing purposes or for using a specific persistence mechanism (database/file/service/etc.)
+    /// </summary>
+
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
     {
 
         #region Repository and constructor
+        //The repository the controller should use for persistence
         IAuthorRepository _authorRepository;
 
-        public AuthorsController(IAuthorRepository authorRepository)
-        {
-            _authorRepository = authorRepository;
-        }
+        public AuthorsController(IAuthorRepository authorRepository) => _authorRepository = authorRepository;
         #endregion
 
         #region Default CRUD actions

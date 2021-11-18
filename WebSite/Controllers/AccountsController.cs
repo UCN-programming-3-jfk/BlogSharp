@@ -10,6 +10,11 @@ using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
+
+    /// <summary>
+    /// This class implements the ASP.NET Core MVC controller which is mapped to the "/Accounts" URI.
+    /// It provides access to functionality logging in, logging out and being denied access
+    /// </summary>
     public class AccountsController : Controller
     {
 
@@ -50,7 +55,7 @@ namespace WebSite.Controllers
             }
             if (string.IsNullOrEmpty(returnUrl))
             {
-                return RedirectToAction();
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -107,7 +112,5 @@ namespace WebSite.Controllers
         {
             return View();
         }
-
- 
     }
 }

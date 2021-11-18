@@ -1,19 +1,19 @@
 ﻿@model WebApiClient.DTOs.AuthorDto
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Create new profile";
 }
 
-<h1>View</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>AuthorDto</h4>
+<h4>Select a name for your blog, and enter your email and desired password</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BlogTitle" class="control-label"></label>
+                <label asp-for="BlogTitle" class="control-label">Give your blog a name</label>
                 <input asp-for="BlogTitle" class="form-control" required maxlength="100"/>
                 <span asp-validation-for="BlogTitle" class="text-danger"></span>
             </div>

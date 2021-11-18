@@ -4,6 +4,10 @@ using WebApiClient.DTOs;
 
 namespace WebApiClient
 {
+    /// <summary>
+    /// This interface defines what functionality is necessary
+    /// for an object to provide access to the BlogSharp business layer (controller)
+    /// </summary>
     public interface IBlogSharpApiClient
     {
         Task<int> CreateAuthorAsync(AuthorDto entity);

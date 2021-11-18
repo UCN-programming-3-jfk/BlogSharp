@@ -8,6 +8,14 @@ using WebApiClient.DTOs;
 
 namespace WebApiClient
 {
+ 
+    /// <summary>
+    /// This class acts as a proxy for the Web API, 
+    /// encapsulating all the HTTP communication, 
+    /// so it can be used from any GUI 
+    /// to access BlogPost and Author CRUD methods
+    /// without knowledge of how to interact with a RESTful service.
+    /// </summary>
     public class BlogSharpApiClient : IBlogSharpApiClient
     {
         private RestClient _restClient;

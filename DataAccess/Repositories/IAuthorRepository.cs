@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
+    /// <summary>
+    /// An interface which defines which functionality 
+    /// an AuthorRepository should provide
+    /// </summary>
     public interface IAuthorRepository
     {
         //Default CRUD methods for Repository (DAO pattern)

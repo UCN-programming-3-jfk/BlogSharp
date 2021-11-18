@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
+    /// <summary>
+    /// Implementation of the IAuthorRepository
+    /// </summary>
     public class AuthorRepository : BaseRepository, IAuthorRepository
     {
         public AuthorRepository(string connectionstring) : base(connectionstring) { }

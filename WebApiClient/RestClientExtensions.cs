@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 
 namespace WebApiClient
 {
+
+    /// <summary>
+    /// This class provides extension methods which enable JSON serialization and HTTP calls to be provided in one line
+    /// </summary>
     public static class RestClientExtensions
     {
         public static async Task<IRestResponse<T>> RequestAsync<T>(this RestClient client, Method method, string resource = null, object body = null)

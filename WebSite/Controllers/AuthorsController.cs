@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApiClient;
 using WebApiClient.DTOs;
 
 namespace WebSite.Controllers
 {
+
+    /// <summary>
+    /// This class implements the ASP.NET Core MVC controller which is mapped to the "/Authors" URI.
+    /// It provides access to CRUD functionality for the AuthorDTO.
+    /// Notice the [Authorize] attribute on the Edit and Delete actions, which demands the user is authenticated
+    /// and will redirect to "/accounts/login" if necessary.
+    /// </summary>
+
     public class AuthorsController : Controller
     {
 
@@ -49,26 +54,26 @@ namespace WebSite.Controllers
             {
                 ViewBag.ErrorMessage = "User not created - error in submitted data!";
             }
-else
-{
-    try
-    {
-        if (await _client.CreateAuthorAsync(author) > 0)
-        {
-            TempData["Message"] = $"User {author.Email} created!";
-            return RedirectToAction(nameof(Index), "Home"); 
-        }
-        else
-        {
-            ViewBag.ErrorMessage = "User not created!";
-        }
-    }
-    catch (Exception ex)
-    {
-        ViewBag.ErrorMessage = ex.Message;
-    }
-}
-return View();
+            else
+            {
+                try
+                {
+                    if (await _client.CreateAuthorAsync(author) > 0)
+                    {
+                        TempData["Message"] = $"User {author.Email} created!";
+                        return RedirectToAction(nameof(Index), "Home");
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "User not created!";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = ex.Message;
+                }
+            }
+            return View();
         }
 
         // GET: AuthorController/Edit/5

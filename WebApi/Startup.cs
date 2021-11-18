@@ -1,12 +1,9 @@
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 
@@ -24,7 +21,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //Registers the calls to the RepositoryFactory to use.
+            //The Dependency Injection module registers the return types of the calls (IAuthorRepository/IBlogPostRepository)
+            //and uses the desired one, when a controller constructor has need of an object that implements that specific interface.
             services.AddScoped((sc) => RepositoryFactory.CreateRepository<IAuthorRepository>(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped((sc) => RepositoryFactory.CreateRepository<IBlogPostRepository>(Configuration.GetConnectionString("DefaultConnection")));
 

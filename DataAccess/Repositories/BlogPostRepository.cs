@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
+
+    /// <summary>
+    /// Implementation of the IBlogPostRepository
+    /// </summary>
     public class BlogPostRepository : BaseRepository, IBlogPostRepository
     {
         public BlogPostRepository(string connectionstring) : base(connectionstring) { }

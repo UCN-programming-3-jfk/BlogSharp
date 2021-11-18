@@ -26,19 +26,24 @@ namespace WebSite
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //Registers the Dependency Injection code
+            //for providing an implementation of IBlogSharpApiClient whenever needed
             services.AddScoped<IBlogSharpApiClient>((cs) => new BlogSharpApiClient(Configuration["WebApiURI"]));
+            
+            
+            //Adds the cookie authentication scheme
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
             options =>
             {
+                //sets the paths to send users, because we like the plural 's' on Accounts
+                //and the default paths are /accoun/login, /account/accessdenied, and /account/logout
                 options.LoginPath = "/Accounts/Login";
                 options.AccessDeniedPath = "/Accounts/AccessDenied";
                 options.LogoutPath = "/Accounts/LogOut";
             });
-            //used by controllers for Dependency Injection
             
             services.AddControllersWithViews();
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

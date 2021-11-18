@@ -6,6 +6,11 @@ using WebApi.DTOs;
 
 namespace WebApi.Controllers
 {
+
+    /// <summary>
+    /// This controller provides login functionality
+    /// </summary>
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginsController : ControllerBase
@@ -14,8 +19,7 @@ namespace WebApi.Controllers
         #region Repository and constructor
         IAuthorRepository _authorRepository;
 
-        public LoginsController(IConfiguration configuration) =>
-            _authorRepository = new AuthorRepository(configuration.GetConnectionString("DefaultConnection"));
+        public LoginsController(IAuthorRepository repository) => _authorRepository = repository;
         #endregion
 
         // POST api/<LoginController>
