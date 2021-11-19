@@ -4,7 +4,7 @@ namespace WebApiClient.DTOs
 {
 
     /// <summary>
-    /// This class defines the Author DTO with the validation attributes for the GUI
+    /// This class defines the Author DTO with validation attributes for the GUI
     /// </summary>
     public class AuthorDto
     {

@@ -1,12 +1,12 @@
 ﻿@model WebApiClient.DTOs.BlogPostDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Write new blog post";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"] </h1>
 
-<h4>BlogPostDto</h4>
+<h4>Get your readers enthusiastic by being personal and vivid!</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,25 +14,25 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="PostTitle" class="control-label"></label>
+                <label asp-for="PostTitle" class="control-label">Post title</label>
                 <input asp-for="PostTitle" class="form-control" />
                 <span asp-validation-for="PostTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostContent" class="control-label"></label>
+                <label asp-for="PostContent" class="control-label">Post content</label>
                 <textarea asp-for="PostContent" class="form-control" cols="60" rows="10"></textarea>
                 <span asp-validation-for="PostContent" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create post" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 <span style="color:red;">@ViewBag.ErrorMessage</span>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="Home">Cancel</a>
 </div>
 
 @section Scripts {

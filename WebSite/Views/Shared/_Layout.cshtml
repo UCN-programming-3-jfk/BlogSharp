@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="bg-primary">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlogSharp</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Blog#</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Create">Create new profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Create"><i class="fa fa-user"></i> Create new profile</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="BlogPosts" asp-action="Create">Write new blog post</a>
@@ -46,14 +46,13 @@
     <div class="container">
         <span style="background-color:azure">@TempData["Message"]</span>
         <main role="main" class="pb-3">
-
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - WebSite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted bg-primary">
+        <div class="container" style="color:lightskyblue">
+            <i>BlogSharp is a simple blog engine created as a learning project.</i>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
