@@ -14,8 +14,8 @@ namespace DataAccess.Repositories
         /// <returns></returns>
         public static T CreateRepository<T> (string connectionstring) where T : class
         {
-            if (typeof(T) is IAuthorDAO) return new AuthorDAO(connectionstring) as T;
-            if (typeof(T) is IBlogPostDAO) return new BlogPostDAO(connectionstring) as T;
+            if (typeof(T) == typeof(IAuthorDAO)) return new AuthorDAO(connectionstring) as T;
+            if (typeof(T) == typeof(IBlogPostDAO)) return new BlogPostDAO(connectionstring) as T;
             throw new ArgumentException($"Unknown type {typeof(T).FullName}");
         }
     }
