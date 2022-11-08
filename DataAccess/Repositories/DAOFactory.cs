@@ -2,7 +2,7 @@
 
 namespace DataAccess.Repositories
 {
-    public static class RepositoryFactory
+    public static class DAOFactory
     {
         /// <summary>
         /// A factory which can create a specific repository.
@@ -14,11 +14,8 @@ namespace DataAccess.Repositories
         /// <returns></returns>
         public static T CreateRepository<T> (string connectionstring) where T : class
         {
-            switch (typeof(T).Name)
-            {
-                case "IAuthorRepository": return new AuthorDAO(connectionstring) as T;
-                case "IBlogPostRepository": return new BlogPostDAO(connectionstring) as T;
-            }
+            if (typeof(T) is IAuthorDAO) return new AuthorDAO(connectionstring) as T;
+            if (typeof(T) is IBlogPostDAO) return new BlogPostDAO(connectionstring) as T;
             throw new ArgumentException($"Unknown type {typeof(T).FullName}");
         }
     }
