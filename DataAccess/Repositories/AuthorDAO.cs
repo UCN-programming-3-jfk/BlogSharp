@@ -11,9 +11,9 @@ namespace DataAccess.Repositories
     /// <summary>
     /// Implementation of the IAuthorRepository
     /// </summary>
-    public class AuthorRepository : BaseRepository, IAuthorRepository
+    public class AuthorDAO : BaseDAO, IAuthorDAO
     {
-        public AuthorRepository(string connectionstring) : base(connectionstring) { }
+        public AuthorDAO(string connectionstring) : base(connectionstring) { }
 
         public async Task<bool> DeleteAsync(int id)
         {

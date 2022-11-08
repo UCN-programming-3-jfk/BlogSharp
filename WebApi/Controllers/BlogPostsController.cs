@@ -25,9 +25,9 @@ namespace WebApi.Controllers
 
         #region Repository and constructor
         //The repository the controller should use for persistence
-        IBlogPostRepository _blogpostRepository;
+        IBlogPostDAO _blogpostRepository;
 
-        public BlogPostsController(IBlogPostRepository repository) => _blogpostRepository = repository;
+        public BlogPostsController(IBlogPostDAO repository) => _blogpostRepository = repository;
         #endregion
 
         #region Default CRUD actions

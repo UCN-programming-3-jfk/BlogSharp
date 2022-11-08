@@ -8,16 +8,16 @@ namespace TestingBlogSharp.DataAccess
 {
 
     
-    public class AuthorRepositoryTests
+    public class AuthorDAOTests
     {
         private Author _newAuthor;
-        private AuthorRepository _authorRepository;
+        private AuthorDAO _authorRepository;
         private string _password = "TestPassword";
 
         [SetUp]
         public async Task Setup()
         {
-             _authorRepository = new AuthorRepository(Configuration.CONNECTION_STRING);
+             _authorRepository = new AuthorDAO(Configuration.CONNECTION_STRING);
             await CreateNewAuthorAsync();
         }
 

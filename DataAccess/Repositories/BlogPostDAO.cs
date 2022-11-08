@@ -11,9 +11,9 @@ namespace DataAccess.Repositories
     /// <summary>
     /// Implementation of the IBlogPostRepository
     /// </summary>
-    public class BlogPostRepository : BaseRepository, IBlogPostRepository
+    public class BlogPostDAO : BaseDAO, IBlogPostDAO
     {
-        public BlogPostRepository(string connectionstring) : base(connectionstring) { }
+        public BlogPostDAO(string connectionstring) : base(connectionstring) { }
 
         public async Task<int> CreateAsync(BlogPost entity)
         {

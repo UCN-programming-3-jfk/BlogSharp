@@ -7,20 +7,20 @@ using System;
 
 namespace TestingBlogSharp.DataAccess
 {
-    public class _blogPostRepositoryTests
+    public class BlogPostDAOTests
     {
         //TODO: add test to test cascading delete of BlogPosts with their Author
         
-        private AuthorRepository _authorRepository;
-        private BlogPostRepository _blogPostRepository;
+        private AuthorDAO _authorRepository;
+        private BlogPostDAO _blogPostRepository;
         private Author _newAuthor;
         private BlogPost _newBlogPost;
 
         [SetUp]
         public async Task SetupAsync()
         {
-            _authorRepository = new AuthorRepository(Configuration.CONNECTION_STRING);
-            _blogPostRepository= new BlogPostRepository(Configuration.CONNECTION_STRING);
+            _authorRepository = new AuthorDAO(Configuration.CONNECTION_STRING);
+            _blogPostRepository= new BlogPostDAO(Configuration.CONNECTION_STRING);
             _newAuthor = new Author() { Email = "mail@myblog.com", BlogTitle = "Title of my blog" };
             _newAuthor.Id = await _authorRepository.CreateAsync(_newAuthor, "test1234");
             _newBlogPost = new BlogPost() { PostTitle = "My post title", AuthorId = _newAuthor.Id, PostContent = "Content", PostCreationDate = System.DateTime.Now };
@@ -30,7 +30,7 @@ namespace TestingBlogSharp.DataAccess
         [TearDown]
         public async Task CleanUpAsync()
         {
-            await new AuthorRepository(Configuration.CONNECTION_STRING).DeleteAsync(_newAuthor.Id);
+            await new AuthorDAO(Configuration.CONNECTION_STRING).DeleteAsync(_newAuthor.Id);
         }
 
         [Test]

@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
     /// An interface which defines which functionality 
     /// an AuthorRepository should provide
     /// </summary>
-    public interface IAuthorRepository
+    public interface IAuthorDAO
     {
         //Default CRUD methods for Repository (DAO pattern)
         Task<int> CreateAsync(Author entity, string password);

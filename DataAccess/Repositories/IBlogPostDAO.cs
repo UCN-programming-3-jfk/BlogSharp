@@ -9,7 +9,7 @@ namespace DataAccess.Repositories
     /// An interface which defines which functionality 
     /// a BlogPostRepository should provide
     /// </summary>
-    public interface IBlogPostRepository {
+    public interface IBlogPostDAO {
         
         Task<int> CreateAsync(BlogPost entity);
         Task<IEnumerable<BlogPost>> GetAllAsync();

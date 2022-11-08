@@ -16,8 +16,8 @@ namespace DataAccess.Repositories
         {
             switch (typeof(T).Name)
             {
-                case "IAuthorRepository": return new AuthorRepository(connectionstring) as T;
-                case "IBlogPostRepository": return new BlogPostRepository(connectionstring) as T;
+                case "IAuthorRepository": return new AuthorDAO(connectionstring) as T;
+                case "IBlogPostRepository": return new BlogPostDAO(connectionstring) as T;
             }
             throw new ArgumentException($"Unknown type {typeof(T).FullName}");
         }

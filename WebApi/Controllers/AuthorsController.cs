@@ -23,9 +23,9 @@ namespace WebApi.Controllers
 
         #region Repository and constructor
         //The repository the controller should use for persistence
-        IAuthorRepository _authorRepository;
+        IAuthorDAO _authorRepository;
 
-        public AuthorsController(IAuthorRepository authorRepository) => _authorRepository = authorRepository;
+        public AuthorsController(IAuthorDAO authorRepository) => _authorRepository = authorRepository;
         #endregion
 
         #region Default CRUD actions

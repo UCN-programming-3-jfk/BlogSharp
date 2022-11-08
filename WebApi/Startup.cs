@@ -24,8 +24,8 @@ namespace WebApi
             //Registers the calls to the RepositoryFactory to use.
             //The Dependency Injection module registers the return types of the calls (IAuthorRepository/IBlogPostRepository)
             //and uses the desired one, when a controller constructor has need of an object that implements that specific interface.
-            services.AddScoped((sc) => RepositoryFactory.CreateRepository<IAuthorRepository>(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped((sc) => RepositoryFactory.CreateRepository<IBlogPostRepository>(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped((sc) => RepositoryFactory.CreateRepository<IAuthorDAO>(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped((sc) => RepositoryFactory.CreateRepository<IBlogPostDAO>(Configuration.GetConnectionString("DefaultConnection")));
 
 
             services.AddControllers();

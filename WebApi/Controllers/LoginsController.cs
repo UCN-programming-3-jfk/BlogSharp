@@ -17,9 +17,9 @@ namespace WebApi.Controllers
     {
 
         #region Repository and constructor
-        IAuthorRepository _authorRepository;
+        IAuthorDAO _authorRepository;
 
-        public LoginsController(IAuthorRepository repository) => _authorRepository = repository;
+        public LoginsController(IAuthorDAO repository) => _authorRepository = repository;
         #endregion
 
         // POST api/<LoginController>
