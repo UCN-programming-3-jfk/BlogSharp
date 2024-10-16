@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace DataAccess.Repositories
+namespace DataAccess.DaoClasses
 {
     /// <summary>
     /// This abstract class defines the core of all repositories

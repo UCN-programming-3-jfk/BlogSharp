@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAccess.Repositories
+namespace DataAccess.DaoClasses
 {
     public static class DAOFactory
     {

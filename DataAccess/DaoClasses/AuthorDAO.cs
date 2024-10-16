@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repositories
+namespace DataAccess.DaoClasses
 {
     /// <summary>
     /// Implementation of the IAuthorRepository

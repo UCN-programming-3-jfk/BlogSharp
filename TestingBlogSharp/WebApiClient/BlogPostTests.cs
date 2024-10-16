@@ -1,4 +1,4 @@
-using DataAccess.Repositories;
+using DataAccess.DaoClasses;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

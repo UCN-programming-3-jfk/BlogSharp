@@ -14,14 +14,14 @@
       <FileName>Model\BlogPost.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DataAccess.Repositories.BaseRepository">
+  <Class Name="DataAccess.DaoClasses.BaseRepository">
     <Position X="6" Y="3" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
       <FileName>Repositories\BaseRepository.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DataAccess.Repositories.BlogPostRepository">
+  <Class Name="DataAccess.DaoClasses.BlogPostRepository">
     <Position X="9.25" Y="5.75" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAIIA=</HashCode>
@@ -29,13 +29,13 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="DataAccess.Repositories.AuthorRepository">
+  <Class Name="DataAccess.DaoClasses.AuthorRepository">
     <Position X="3" Y="5.75" Width="5.75" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
-      <Class Name="DataAccess.Repositories.AuthorRepository.AuthorTuple" Collapsed="true">
+      <Class Name="DataAccess.DaoClasses.AuthorRepository.AuthorTuple" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Repositories\AuthorRepository.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -47,14 +47,14 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="DataAccess.Repositories.IAuthorRepository">
+  <Interface Name="DataAccess.DaoClasses.IAuthorRepository">
     <Position X="0.5" Y="3" Width="5" />
     <TypeIdentifier>
       <HashCode>AgEAAAAAAAAAAAAAAAAAAAQAAAAAAAgAAAAAAIAAIIA=</HashCode>
       <FileName>Repositories\IAuthorRepository.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DataAccess.Repositories.IBlogPostRepository">
+  <Interface Name="DataAccess.DaoClasses.IBlogPostRepository">
     <Position X="9.75" Y="3" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAIAAIIA=</HashCode>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataAccess.Model;
-using DataAccess.Repositories;
+using DataAccess.DaoClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApi.DTOs;

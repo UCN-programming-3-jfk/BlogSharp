@@ -1,4 +1,4 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.DaoClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;

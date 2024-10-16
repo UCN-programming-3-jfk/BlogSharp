@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace DataAccess.Repositories
+namespace DataAccess.DaoClasses
 {
 
     /// <summary>

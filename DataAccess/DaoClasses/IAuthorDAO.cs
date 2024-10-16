@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repositories
+namespace DataAccess.DaoClasses
 {
     /// <summary>
     /// An interface which defines which functionality 
