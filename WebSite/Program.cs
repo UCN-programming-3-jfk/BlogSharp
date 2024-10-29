@@ -35,10 +35,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "authorBlogPosts",
-    pattern: "Authors/{authorId}/BlogPosts",
-    defaults: new { controller = "Authors", action = "BlogPosts" });
+
 
 app.MapControllerRoute(
     name: "default",
