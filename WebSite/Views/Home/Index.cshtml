@@ -12,7 +12,7 @@
             @*create a link (<A href...>) for each blog post 
                 which points to the BlogPost controller's details view
                 and sends the ID of the blog post *@
-            <br />@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })
+            <br /><div style="font-weight:bold;margin:0px;padding:0px;">@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })</div>
         }
     </div>
 </div>

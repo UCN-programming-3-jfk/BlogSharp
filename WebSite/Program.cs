@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using WebApiClient;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 //Registers the Dependency Injection code
@@ -36,15 +35,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+app.MapControllerRoute(
+    name: "authorBlogPosts",
+    pattern: "Authors/{authorId}/BlogPosts",
+    defaults: new { controller = "Authors", action = "BlogPosts" });
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
 
 static void AddCookieAuthentication(IServiceCollection services)
 {

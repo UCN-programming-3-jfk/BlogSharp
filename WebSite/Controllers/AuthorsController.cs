@@ -27,7 +27,18 @@ namespace WebSite.Controllers
 
 
         // GET: AuthorController
-        public ActionResult Index()
+        [HttpGet("Authors/{authorId}/BlogPosts")]
+        public async Task<ActionResult> BlogPosts(int authorId)
+        {
+            var author = await _client.GetAuthorByIdAsync(authorId);
+            var blogPosts = await _client.GetBlogPostsFromAuthorIdAsync(authorId);
+            var model = new { Author = author, BlogPosts = blogPosts };
+            return View(model);
+        }
+
+
+            // GET: AuthorController
+            public ActionResult Index()
         {
             return View();
         }

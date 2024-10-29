@@ -187,5 +187,17 @@ namespace WebApiClient
                 throw new Exception($"Error deleting blogpost with id={id}. Message was {response.Content}");
             }
         }
+
+        public async Task<IEnumerable<BlogPostDto>> GetBlogPostsFromAuthorIdAsync(int authorId)
+        {
+            var request = new RestRequest($"blogposts", Method.GET, DataFormat.Json);
+            request.AddParameter("authorid", authorId);
+            var response = await _restClient.ExecuteAsync<IEnumerable<BlogPostDto>>(request);
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving blogposts for author with id: {authorId}. Message was {response.Content}");
+            }
+            return response.Data;
+        }
     }
 }

@@ -39,17 +39,15 @@ public class BlogPostsController : ControllerBase
         if (authorId.HasValue)
         {
             posts = await _blogpostRepository.GetByAuthorIdAsync(authorId.Value);
+            return Ok(posts.ToDtos());
         }
         if (!string.IsNullOrEmpty(filter) && filter == "getlatest10")
         {
             posts = await _blogpostRepository.Get10LatestAsync();
+            return Ok(posts.ToDtos());
         }
-        else
-        {
             posts = await _blogpostRepository.GetAllAsync();
-        }
-
-        return Ok(posts.ToDtos());
+            return Ok(posts.ToDtos());
     }
 
     // GET api/<BlogPostController>/5

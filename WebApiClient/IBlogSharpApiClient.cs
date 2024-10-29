@@ -19,6 +19,7 @@ namespace WebApiClient
         Task<IEnumerable<BlogPostDto>> Get10LatestBlogPostsAsync();
         Task<AuthorDto> GetAuthorByIdAsync(int id);
         Task<BlogPostDto> GetBlogPostByIdAsync(int id);
+        Task<IEnumerable<BlogPostDto>> GetBlogPostsFromAuthorIdAsync(int authorId);
         Task<int> LoginAsync(AuthorDto author);
         Task<bool> UpdateAuthorAsync(AuthorDto entity);
         Task<bool> UpdateAuthorPasswordAsync(AuthorDto author);
