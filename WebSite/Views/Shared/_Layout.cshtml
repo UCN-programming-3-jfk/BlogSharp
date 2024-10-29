@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header class="bg-primary">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+    <header class="bg-primary mb-0">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Blog#</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -42,9 +42,9 @@
             </div>
         </nav>
     </header>
-
+    <div class="container-fluid d-flex justify-content-center" style="background-color:aqua; margin-top: 0;"><span>@TempData["Message"]</span></div>
+    <p></p>
     <div class="container">
-        <span style="background-color:azure">@TempData["Message"]</span>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

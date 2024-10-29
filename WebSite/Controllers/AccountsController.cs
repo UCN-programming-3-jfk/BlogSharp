@@ -47,15 +47,20 @@ public class AccountsController : Controller
 
             await SignInUsingClaims(claims);
             TempData["Message"] = $"You are logged in as {user.Email}";
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
         }
         else
         {
-            ViewBag.ErrorMessage = "Incorrect login";
+            ViewBag.ErrorMessage = "Incorrect login or user does not exist";
         }
-        if (string.IsNullOrEmpty(returnUrl))
-        {
-            return RedirectToAction("Index", "Home");
-        }
+        
         return View();
     }
 

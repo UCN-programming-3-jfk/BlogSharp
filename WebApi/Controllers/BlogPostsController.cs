@@ -30,24 +30,24 @@ public class BlogPostsController : ControllerBase
 
     #region Default CRUD actions
     // GET: api/<BlogPostController>?authorid=23
+    //    OR
+    // GET: api/<BlogPostController>?filter=getlatest10
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BlogPostDto>>> Get([FromQuery] int? authorId, [FromQuery] string filter)
     {
-
         IEnumerable<BlogPost> posts;
 
         if (authorId.HasValue)
         {
             posts = await _blogpostRepository.GetByAuthorIdAsync(authorId.Value);
-            return Ok(posts.ToDtos());
         }
-        if (!string.IsNullOrEmpty(filter) && filter == "getlatest10")
+        else if (!string.IsNullOrEmpty(filter) && filter == "getlatest10")
         {
             posts = await _blogpostRepository.Get10LatestAsync();
-            return Ok(posts.ToDtos());
         }
-            posts = await _blogpostRepository.GetAllAsync();
-            return Ok(posts.ToDtos());
+        else{posts = await _blogpostRepository.GetAllAsync();}
+
+        return Ok(posts.ToDtos());
     }
 
     // GET api/<BlogPostController>/5

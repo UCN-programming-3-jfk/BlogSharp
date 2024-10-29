@@ -9,6 +9,7 @@
 @if (!Context.User.Identity.IsAuthenticated)
 {
     <hr />
+    <span style="background-color:wheat; color:red;">@ViewBag.ErrorMessage</span>
     <div class="row">
         <div class="col-md-4">
             <form method="post">
@@ -28,10 +29,6 @@
                 </div>
             </form>
         </div>
-    </div>
-    <span style="background-color:wheat; color:red;">@ViewBag.ErrorMessage</span>
-    <div>
-        <a asp-action="Index" asp-controller="Home">Back to front page</a>
     </div>
 }
     @section Scripts {

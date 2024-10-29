@@ -10,9 +10,9 @@ namespace WebApiClient
     /// </summary>
     public static class RestClientExtensions
     {
-        public static async Task<IRestResponse<T>> RequestAsync<T>(this RestClient client, Method method, string resource = null, object body = null)
+        public static async Task<RestResponse<T>> RequestAsync<T>(this RestClient client, Method method, string resource = null, object body = null)
         {
-            var request = new RestRequest(resource, method, DataFormat.Json);
+            var request = new RestRequest(resource, method);
             if (body != null)
             {
                 request.AddJsonBody(JsonSerializer.Serialize(body));
@@ -20,9 +20,9 @@ namespace WebApiClient
             return await client.ExecuteAsync<T>(request, method);
         }
 
-        public static async Task<IRestResponse> RequestAsync(this RestClient client, Method method, string resource = null, object body = null)
+        public static async Task<RestResponse> RequestAsync(this RestClient client, Method method, string resource = null, object body = null)
         {
-            var request = new RestRequest(resource, method, DataFormat.Json);
+            var request = new RestRequest(resource, method);
             if (body != null)
             {
                 request.AddJsonBody(JsonSerializer.Serialize(body));
