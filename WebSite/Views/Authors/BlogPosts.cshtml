@@ -6,15 +6,24 @@
 <div class="text-center">
     <h2>@Model.Author.BlogTitle blog</h2>
     <div>
-        @*iterate over all the BlogPostDtos in the model*@
-        @foreach (BlogPostDto post in @Model.BlogPosts)
-        {
-            @*create a link (<A href...>) for each blog post
-        which points to the BlogPost controller's details view
-        and sends the ID of the blog post *@
-            @* <br /> *@
-
-            <div style="font-weight:bold;margin:0px;padding-top:10px;">@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })</div>
-        }
+        <div>
+            @*iterate over all the BlogPostDtos in the model*@
+            @foreach (dynamic post in @Model.BlogPosts)
+            {
+                @*create a link (<A href...>) for each blog post
+            which points to the BlogPost controller's details view
+            and sends the ID of the blog post *@
+                @* <br /> *@
+                <div style="font-weight:bold;margin:0px;padding-top:10px;">
+                    @Html.ActionLink(
+                             (string)@post.PostTitle,
+                             "Details",
+                             "BlogPosts",
+                             new { id = @post.Id },
+                             new { @class = "link-hover-effect" } // Add the CSS class here
+                             )
+                </div>
+            }
+        </div>
     </div>
 </div>
