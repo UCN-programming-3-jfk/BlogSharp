@@ -7,14 +7,13 @@
 
 <div class="text-center">
     <h1>@Model.BlogPost.PostTitle</h1>
-    <h4>By: @Model.Author.Email</h4>
-    
-    <div><a href="/Authors/@Model.Author.Id/BlogPosts">View all blogposts from this author</a></div>
+    <h4>From the blog
+        <a href="/Authors/@Model.Author.Id/BlogPosts">@Model.Author.BlogTitle</a>
+    </h4>
     </div>
-    <hr />
+    <hr />  
+    <div class="text-right" style="padding-bottom:10px;font-style:italic;font-weight:bold;">@Model.BlogPost.PostCreationDate.ToString("dd. MMMM, yyyy") </div>
     <div>
     @Html.Raw(@Model.BlogPost.PostContent.Replace("\n", "<br />").Replace(". ", ".<br /> "))
-</div>
-<div style="text-align:right;">
-    <a asp-controller="Home" asp-action="Index">Back to List</a>
+    <hr />
 </div>

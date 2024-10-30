@@ -4,7 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 <div class="text-center">
-    <h4>All blog posts by @Model.Author.Email</h4>
+    <h2>@Model.Author.BlogTitle blog</h2>
     <div>
         @*iterate over all the BlogPostDtos in the model*@
         @foreach (BlogPostDto post in @Model.BlogPosts)
@@ -12,9 +12,9 @@
             @*create a link (<A href...>) for each blog post
         which points to the BlogPost controller's details view
         and sends the ID of the blog post *@
-            <br />
+            @* <br /> *@
 
-            <div style="font-weight:bold;margin:0px;padding:0px;">@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })</div>
+            <div style="font-weight:bold;margin:0px;padding-top:10px;">@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })</div>
         }
     </div>
 </div>

@@ -4,7 +4,12 @@
     ViewData["Title"] = "Home Page";
 }
 <div class="text-center">
-    <h4>Latest blog posts</h4>
+    <div class="py-5 text-center" style="background-color:#f0f4ff;">
+    <h1 >Welcome to Blog#</h1>
+    Where people go for creating and absorbing interesting content!
+    </div>
+    <br/>
+    <h3>10 latest blog posts</h3>
     <div>
         @*iterate over all the BlogPostDtos in the model*@
         @foreach (dynamic post in @Model.BlogPosts)
@@ -12,7 +17,17 @@
             @*create a link (<A href...>) for each blog post 
                 which points to the BlogPost controller's details view
                 and sends the ID of the blog post *@
-            <br /><div style="font-weight:bold;margin:0px;padding:0px;">@Html.ActionLink((string)@post.PostTitle, "Details", "BlogPosts", new { id = @post.Id }, new { })</div>
+            @* <br /> *@
+            <div style="font-weight:bold;margin:0px;padding-top:10px;">
+                @Html.ActionLink(
+                         (string)@post.PostTitle,
+                         "Details",
+                         "BlogPosts",
+                         new { id = @post.Id },
+                         new { @class = "link-hover-effect" } // Add the CSS class here
+                         )
+            </div>
+
         }
     </div>
 </div>

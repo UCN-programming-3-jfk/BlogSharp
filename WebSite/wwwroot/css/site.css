@@ -1,14 +1,30 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-
 navbar {
     height: 60px;
 }
 
+li.nav-item:has(:hover) {
+    background-color:blue;
+}
 header, footer, header a {
     color: white;
 }
+
+/* Scale links slightly on hover */
+.link-hover-effect {
+    display: inline-block;
+    transition: transform 250ms ease-in-out;
+    text-decoration:none;
+    
+}
+
+    .link-hover-effect:hover {
+        transform: scale(1.1);
+        text-decoration: none;
+        color: red;
+    }
 
 a.navbar-brand {
     white-space: normal;
