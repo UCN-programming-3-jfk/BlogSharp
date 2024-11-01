@@ -39,7 +39,7 @@ namespace TestingBlogSharp.DataAccess
         {
             //ARRANGE & ACT is done in Setup()
             //ASSERT
-            Assert.IsTrue(_newAuthor.Id > 0, "Created author ID not returned");
+            Assert.That(_newAuthor.Id > 0, "Created author ID not returned");
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var authors = await _authorRepository.GetAllAsync();
             //ASSERT
-            Assert.IsTrue(authors.Count() > 0, "No authors returned");
+            Assert.That(authors.Count() > 0, "No authors returned");
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT 
             bool deleted = await _authorRepository.DeleteAsync(_newAuthor.Id);
             //ASSERT
-            Assert.IsTrue(deleted, "Author not deleted");
+            Assert.That(deleted, "Author not deleted");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var refoundAuthor = await _authorRepository.GetByIdAsync(_newAuthor.Id);
             //ASSERT
-            Assert.IsTrue(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by id");
+            Assert.That(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by id");
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var refoundAuthor = await _authorRepository.GetByEmailAsync(_newAuthor.Email);
             //ASSERT
-            Assert.IsTrue(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by email");
+            Assert.That(_newAuthor.Id == refoundAuthor.Id && _newAuthor.Email == refoundAuthor.Email && _newAuthor.BlogTitle == refoundAuthor.BlogTitle, "Author not found again by email");
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace TestingBlogSharp.DataAccess
             await _authorRepository.UpdateAsync(_newAuthor);
             //ASSERT
             var refoundAuthor = await _authorRepository.GetByIdAsync(_newAuthor.Id);
-            Assert.IsTrue(refoundAuthor.Email == updatedEmail, "Author not updated");
+            Assert.That(refoundAuthor.Email == updatedEmail, "Author not updated");
         }
 
         [Test]
@@ -109,8 +109,8 @@ namespace TestingBlogSharp.DataAccess
             
             //ASSERT
             var loginWithNewPasswordOk = await _authorRepository.LoginAsync(_newAuthor.Email, newPassword);
-            Assert.IsTrue(updateSuccess, "Author not updated");
-            Assert.IsTrue(loginWithNewPasswordOk > 0, "Unable to login with Author's updated password");
+            Assert.That(updateSuccess, "Author not updated");
+            Assert.That(loginWithNewPasswordOk > 0, "Unable to login with Author's updated password");
         }
 
     }

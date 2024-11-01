@@ -40,7 +40,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var blogposts = await _blogPostRepository.GetAllAsync();
             //ASSERT
-            Assert.IsTrue(blogposts.Count() > 0, "No blog posts returned");
+            Assert.That(blogposts.Count() > 0, "No blog posts returned");
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace TestingBlogSharp.DataAccess
             //ARRANGE
             //ACT
             //ASSERT
-            Assert.IsTrue(_newBlogPost.Id > 0, "Created blogpost ID not returned");
+            Assert.That(_newBlogPost.Id > 0, "Created blogpost ID not returned");
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             bool deleted = await _blogPostRepository.DeleteAsync(_newBlogPost.Id);
             //ASSERT
-            Assert.IsTrue(deleted, "BlogPost not deleted");
+            Assert.That(deleted, "BlogPost not deleted");
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace TestingBlogSharp.DataAccess
             //ACT
             var refoundBlogPost = await _blogPostRepository.GetByIdAsync(_newBlogPost.Id);
             //ASSERT
-            Assert.IsTrue(refoundBlogPost != null, "BlogPost not found again");
+            Assert.That(refoundBlogPost != null, "BlogPost not found again");
         }
 
 
@@ -129,7 +129,7 @@ Donec vehicula non elit ut luctus.In tellus turpis,
             //ACT
             var refoundBlogPosts = await _blogPostRepository.Get10LatestAsync();
             //ASSERT
-            Assert.IsTrue(refoundBlogPosts.Count() == 10, "BlogPost not found again");
+            Assert.That(refoundBlogPosts.Count() == 10, "BlogPost not found again");
         }
 
         [Test]
@@ -146,7 +146,7 @@ Donec vehicula non elit ut luctus.In tellus turpis,
             await _blogPostRepository.UpdateAsync(_newBlogPost);
             //ASSERT
             var refoundBlogPost = await _blogPostRepository.GetByIdAsync(_newBlogPost.Id);
-            Assert.IsTrue(refoundBlogPost.PostTitle == updatedPostTitle && refoundBlogPost.PostContent == updatedPostContent 
+            Assert.That(refoundBlogPost.PostTitle == updatedPostTitle && refoundBlogPost.PostContent == updatedPostContent 
                 && refoundBlogPost.PostCreationDate.Year == updatedPostDate.Year
                 && refoundBlogPost.PostCreationDate.Month == updatedPostDate.Month
                 && refoundBlogPost.PostCreationDate.Day == updatedPostDate.Day

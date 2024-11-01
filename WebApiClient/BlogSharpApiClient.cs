@@ -199,5 +199,17 @@ namespace WebApiClient
             }
             return response.Data;
         }
+
+        public async Task<IEnumerable<BlogPostDto>> GetBlogPostsFromPartOfTitleOrContentAsync(string partOfTitleOrContent)
+        {
+            var request = new RestRequest($"blogposts/search", Method.Get);
+            request.AddParameter("searchstring", partOfTitleOrContent);
+            var response = await _restClient.ExecuteAsync<IEnumerable<BlogPostDto>>(request);
+            if (!response.IsSuccessful)
+            {
+                throw new Exception($"Error retrieving blogposts by searching with: '{partOfTitleOrContent}'. Message was {response.Content}");
+            }
+            return response.Data;
+        }
     }
 }

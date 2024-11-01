@@ -11,7 +11,7 @@
     <header class="bg-primary mb-0">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Blog#</a>
+                @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -38,6 +38,10 @@
                             }
                         </li>
                     </ul>
+                        <form class="form-inline my-2 my-lg-0" method="get" action="/">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search blogposts" aria-label="Blogposts search box" name="searchstring">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </form>
                 </div>
             </div>
         </nav>

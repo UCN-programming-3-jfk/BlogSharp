@@ -54,7 +54,7 @@ namespace TestingBlogSharp.WebApi
             //ACT
             var blogposts = await _client.GetAllBlogPostsAsync();
             //ASSERT
-            Assert.IsTrue(blogposts.Count() > 0, "No blog posts returned");
+            Assert.That(blogposts.Count() > 0, "No blog posts returned");
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace TestingBlogSharp.WebApi
         {
             //ARRANGE & ACT done in setup
             //ASSERT
-            Assert.IsTrue(_newBlogPost.Id > 0, "Created blogpost ID not returned");
+            Assert.That(_newBlogPost.Id > 0, "Created blogpost ID not returned");
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace TestingBlogSharp.WebApi
             //ACT
             bool deleted = await _client.DeleteBlogPostAsync(_newBlogPost.Id);
             //ASSERT
-            Assert.IsTrue(deleted, "BlogPost not deleted");
+            Assert.That(deleted, "BlogPost not deleted");
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace TestingBlogSharp.WebApi
             //ACT
             var refoundBlogPost = await _client.GetBlogPostByIdAsync(_newBlogPost.Id);
             //ASSERT
-            Assert.IsTrue(refoundBlogPost != null, "BlogPost not found again");
+            Assert.That(refoundBlogPost != null, "BlogPost not found again");
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace TestingBlogSharp.WebApi
             await _client.UpdateBlogPostAsync(_newBlogPost);
             //ASSERT
             var refoundBlogPost = await _client.GetBlogPostByIdAsync(_newBlogPost.Id);
-            Assert.IsTrue(refoundBlogPost.PostTitle == updatedPostTitle && refoundBlogPost.PostContent == updatedPostContent
+            Assert.That(refoundBlogPost.PostTitle == updatedPostTitle && refoundBlogPost.PostContent == updatedPostContent
                 && refoundBlogPost.PostCreationDate.Year == updatedPostDate.Year
                 && refoundBlogPost.PostCreationDate.Month == updatedPostDate.Month
                 && refoundBlogPost.PostCreationDate.Day == updatedPostDate.Day

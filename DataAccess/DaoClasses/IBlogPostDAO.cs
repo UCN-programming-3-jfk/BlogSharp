@@ -19,5 +19,6 @@ namespace DataAccess.DaoClasses
 
         Task<IEnumerable<BlogPost>> GetByAuthorIdAsync(int authorId);
         Task<IEnumerable<BlogPost>> Get10LatestAsync();
+        Task<IEnumerable<BlogPost>> GetByPartOfTitleOrContentAsync(string partOfTitleOrContent);
     }
 }

@@ -80,6 +80,17 @@ public class BlogPostsController : ControllerBase
     {
         if (!await _blogpostRepository.DeleteAsync(id)) { return NotFound(); }
         else { return Ok(); }
-    } 
+    }
+
+
+    [HttpGet]
+    [Route("search")]
+    public async Task<ActionResult<IEnumerable<BlogPostDto>>> Get([FromQuery] string searchstring)
+    {
+        IEnumerable<BlogPost> posts = posts = await _blogpostRepository.GetByPartOfTitleOrContentAsync(searchstring);
+        return Ok(posts.ToDtos());
+    }
     #endregion
+
+
 }

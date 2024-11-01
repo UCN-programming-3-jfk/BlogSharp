@@ -112,5 +112,19 @@ namespace DataAccess.DaoClasses
                 throw new Exception($"Error getting latest blog posts: '{ex.Message}'.", ex);
             }
         }
+
+        public async Task<IEnumerable<BlogPost>> GetByPartOfTitleOrContentAsync(string partOfTitleOrContent)
+        {
+            try
+            {
+                var query = "SELECT * FROM BlogPost WHERE PostTitle LIKE @partOfTitleOrContent OR PostContent LIKE @partOfTitleOrContent";
+                using var connection = CreateConnection();
+                return await connection.QueryAsync<BlogPost>(query, new { partOfTitleOrContent= $"%{partOfTitleOrContent}%" });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting latest blog posts: '{ex.Message}'.", ex);
+            }
+        }
     }
 }
