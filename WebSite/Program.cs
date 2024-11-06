@@ -47,16 +47,5 @@ static void AddCookieAuthentication(IServiceCollection services)
 {
     //Adds the cookie authentication scheme
     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-    options =>
-    {
-        //sets the paths to send users, because the default paths are
-        //account/login
-        //account/accessdenied
-        //account/logout
-        //but we like the plural 's' on Accounts ;-)
-        options.LoginPath = "/Accounts/Login";
-        options.AccessDeniedPath = "/Accounts/AccessDenied";
-        options.LogoutPath = "/Accounts/LogOut";
-    });
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 }

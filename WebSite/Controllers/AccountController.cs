@@ -14,12 +14,12 @@ namespace WebSite.Controllers;
 /// This class implements the ASP.NET Core MVC controller which is mapped to the "/Accounts" URI.
 /// It provides access to functionality logging in, logging out and being denied access
 /// </summary>
-public class AccountsController : Controller
+public class AccountController : Controller
 {
 
     IBlogSharpApiClient _client;
 
-    public AccountsController(IBlogSharpApiClient client)
+    public AccountController(IBlogSharpApiClient client)
     {
         _client = client;
     }

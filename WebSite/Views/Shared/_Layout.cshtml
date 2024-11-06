@@ -30,11 +30,11 @@
                         <li class="nav-item">
                             @if (Context.User.Identity.IsAuthenticated)
                             {
-                                <a class="nav-link " asp-area="" asp-controller="Accounts" asp-action="LogOut">Log out</a>
+                                <a class="nav-link " asp-area="" asp-controller="Account" asp-action="LogOut">Log out</a>
                             }
                             else
                             {
-                                <a class="nav-link " asp-area="" asp-controller="Accounts" asp-action="LogIn">Log in</a>
+                                <a class="nav-link " asp-area="" asp-controller="Account" asp-action="LogIn">Log in</a>
                             }
                         </li>
                     </ul>

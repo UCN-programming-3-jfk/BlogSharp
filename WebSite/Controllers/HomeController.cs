@@ -21,6 +21,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index([FromQuery]string? searchstring)
     {
         dynamic model = new ExpandoObject();
+
         if(searchstring != null)
         {
             model.BlogPosts = await _client.GetBlogPostsFromPartOfTitleOrContentAsync(searchstring);
@@ -29,6 +30,7 @@ public class HomeController : Controller
         {
             model.BlogPosts = await _client.Get10LatestBlogPostsAsync();
         }
+
         return View(model);
     }
 
